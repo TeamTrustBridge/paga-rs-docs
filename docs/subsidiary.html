@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Subsidiary accounts — paga-rs</title>
+<meta name="description" content="Paga accounts for your customers, held on your behalf. Issue, hold and move money on their account. 8 operations in the Rust SDK for the Paga Engine API.">
+<link rel="canonical" href="https://teamtrustbridge.github.io/paga-rs-docs/subsidiary.html">
+<meta property="og:title" content="Subsidiary accounts — paga-rs">
+<meta property="og:description" content="Paga accounts for your customers, held on your behalf. Issue, hold and move money on their account. 8 operations in the Rust SDK for the Paga Engine API.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://teamtrustbridge.github.io/paga-rs-docs/subsidiary.html">
+<meta name="generator" content="paga-docs-builder">
+<link rel="stylesheet" href="assets/style.css">
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="layout">
+<nav class="sidebar" aria-label="Documentation">
+  <a class="brand" href="index.html">
+    <span class="brand-name">Paga Engine</span>
+    <span class="brand-language">Rust</span>
+  </a>
+  <li><a href="index.html">Getting started</a></li>
+<div class="nav-group"><p class="nav-heading">Accept payments</p><ul class="nav-list">
+<li><a href="checkout.html">Checkout</a></li>
+<li><a href="collection.html">Collection</a></li>
+<li><a href="refunds.html">Refunds</a></li>
+<li><a href="direct-debit.html">Direct Debit</a></li>
+</ul></div>
+<div class="nav-group"><p class="nav-heading">Make payments</p><ul class="nav-list">
+<li><a href="money-transfer.html">Money Transfer</a></li>
+<li><a href="airtime.html">Airtime and data</a></li>
+<li><a href="bill-payment.html">Bill payment</a></li>
+<li><a href="status.html">Transaction status</a></li>
+</ul></div>
+<div class="nav-group"><p class="nav-heading">Manage accounts</p><ul class="nav-list">
+<li><a href="business-account.html">Business account</a></li>
+<li><a href="subsidiary.html" aria-current="page">Subsidiary accounts</a></li>
+<li><a href="persistent.html">Persistent accounts</a></li>
+<li><a href="customers.html">Customers</a></li>
+</ul></div>
+<div class="nav-group"><p class="nav-heading">Reference</p><ul class="nav-list">
+<li><a href="reference.html">All operations</a></li>
+<li><a href="webhooks.html">Webhooks</a></li>
+</ul></div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <button class="button menu-toggle" data-menu-toggle type="button" aria-expanded="false" aria-label="Toggle navigation">Menu</button>
+    <span class="topbar-spacer"></span>
+    <button class="button" data-theme-toggle type="button" aria-label="Toggle the colour theme">☾</button>
+  </div>
+  <main class="content" id="main">
+<h1>Subsidiary accounts</h1>
+<p class="lead">Paga accounts for your customers, held on your behalf. Issue, hold and move money on their account.</p>
+
+<p>A subsidiary account is a Paga account for one of your customers. You can hold their money, move it between accounts, and set it up to sweep straight into a bank account.</p>
+
+<h2 id="operations">Operations</h2>
+<article class="op" id="op-create-subsidiary-account" data-operation="create-subsidiary-account">
+  <div class="op-header">
+    <h3 class="op-name">Create a subsidiary account</h3>
+    <a class="op-anchor" href="#op-create-subsidiary-account" aria-label="Link to Create a subsidiary account">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">POST /subsidiary-accounts</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">referenceNumber + accountReference + iifiNumber + autoSweep.bankPublicId + autoSweep.destination + autoSweep.accountNumber + callbackUrl</span>
+  </div>
+  <p>Creates a Paga account for one of your customers.</p>
+  <ul><li>Leave out <code>autoSweep</code> for a ledger-backed account that holds funds; set <code>autoSweep.destination</code> to <code>VIRTUAL_ACCOUNT</code> or <code>BANK</code> for a virtual account that settles straight away.</li>
+<li>Reusing a <code>referenceNumber</code> or <code>accountReference</code> returns status code <code>102</code> and never creates a second account.</li></ul>
+  <h4>Rust</h4>
+  <p><code>create_subsidiary_account</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-create-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-create-subsidiary-account" class="language-rust">let account = client
+    .create_subsidiary_account(CreateSubsidiaryAccount::new(
+        &quot;REF-000005&quot;,
+        &quot;CUST-000184-WALLET&quot;,
+        &quot;Bello Ramon&quot;,
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-charge-subsidiary-account" data-operation="charge-subsidiary-account">
+  <div class="op-header">
+    <h3 class="op-name">Charge a subsidiary account</h3>
+    <a class="op-anchor" href="#op-charge-subsidiary-account" aria-label="Link to Charge a subsidiary account">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">POST /subsidiary-accounts/{accountReference}/charge</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">referenceNumber + amount + currency + narration</span>
+  </div>
+  <p>Debits a ledger-backed subsidiary account.</p>
+  <ul><li>Not available on virtual accounts.</li>
+<li>Retrying with the same <code>referenceNumber</code> never moves money twice.</li></ul>
+  <h4>Rust</h4>
+  <p><code>charge_subsidiary_account</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-charge-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-charge-subsidiary-account" class="language-rust">let charge = client
+    .charge_subsidiary_account(ChargeSubsidiaryAccount::new(
+        &quot;CUST-000184-WALLET&quot;,
+        &quot;REF-CHARGE-001&quot;,
+        1000.0,
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-top-up-subsidiary-account" data-operation="top-up-subsidiary-account">
+  <div class="op-header">
+    <h3 class="op-name">Top up a subsidiary account</h3>
+    <a class="op-anchor" href="#op-top-up-subsidiary-account" aria-label="Link to Top up a subsidiary account">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">POST /subsidiary-accounts/{accountReference}/topup</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">referenceNumber + amount + currency + narration</span>
+  </div>
+  <p>Credits a ledger-backed subsidiary account from your business balance.</p>
+  <ul><li>Not available on virtual accounts.</li></ul>
+  <h4>Rust</h4>
+  <p><code>top_up_subsidiary_account</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-top-up-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-top-up-subsidiary-account" class="language-rust">let top_up = client
+    .top_up_subsidiary_account(TopUpSubsidiaryAccount::new(
+        &quot;CUST-000184-WALLET&quot;,
+        &quot;REF-TOPUP-001&quot;,
+        500.0,
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-transfer-between-subsidiary-accounts" data-operation="transfer-between-subsidiary-accounts">
+  <div class="op-header">
+    <h3 class="op-name">Transfer between subsidiary accounts</h3>
+    <a class="op-anchor" href="#op-transfer-between-subsidiary-accounts" aria-label="Link to Transfer between subsidiary accounts">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">POST /subsidiary-accounts/transfer</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">referenceNumber + sourceAccountIdentifier + destinationAccountIdentifier + amount + currency + narration</span>
+  </div>
+  <p>Moves money between two ledger-backed subsidiary accounts.</p>
+  <ul><li>Paga sends one callback, for the source account only.</li></ul>
+  <h4>Rust</h4>
+  <p><code>transfer_between_subsidiary_accounts</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-transfer-between-subsidiary-accounts" type="button">Copy</button><pre><code id="code-rust-transfer-between-subsidiary-accounts" class="language-rust">let transfer = client
+    .transfer_between_subsidiary_accounts(
+        TransferBetweenSubsidiaryAccounts::new(
+            &quot;CUST-000184-WALLET&quot;,
+            &quot;CUST-000221-WALLET&quot;,
+            &quot;REF-TRANSFER-001&quot;,
+            1500.0,
+        ),
+    )
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-retrieve-subsidiary-account" data-operation="retrieve-subsidiary-account">
+  <div class="op-header">
+    <h3 class="op-name">Retrieve a subsidiary account</h3>
+    <a class="op-anchor" href="#op-retrieve-subsidiary-account" aria-label="Link to Retrieve a subsidiary account">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">GET /subsidiary-accounts/{accountReference}</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
+  </div>
+  <p>Returns an account's details, limits, callback URL and balance.</p>
+  <ul><li>The <code>accountIdentifier</code> is the account's <code>accountReference</code>.</li></ul>
+  <h4>Rust</h4>
+  <p><code>retrieve_subsidiary_account</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-retrieve-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-retrieve-subsidiary-account" class="language-rust">let account = client
+    .retrieve_subsidiary_account(&quot;CUST-000184-WALLET&quot;, &quot;REF-GET-001&quot;)
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-update-subsidiary-account" data-operation="update-subsidiary-account">
+  <div class="op-header">
+    <h3 class="op-name">Update a subsidiary account</h3>
+    <a class="op-anchor" href="#op-update-subsidiary-account" aria-label="Link to Update a subsidiary account">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">PUT /subsidiary-accounts/{accountReference}</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">referenceNumber + accountIdentifier + iifiNumber + autoSweep.destination + autoSweep.bankPublicId + autoSweep.accountNumber + callbackUrl</span>
+  </div>
+  <p>Changes an account.</p>
+  <ul><li>Send only what you want to change.</li>
+<li><code>accountNumber</code> and <code>accountReference</code> cannot be changed.</li></ul>
+  <h4>Rust</h4>
+  <p><code>update_subsidiary_account</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-update-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-update-subsidiary-account" class="language-rust">let account = client
+    .update_subsidiary_account(UpdateSubsidiaryAccount::new(
+        &quot;CUST-000184-WALLET&quot;,
+        &quot;REF-UPDATE-001&quot;,
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-get-subsidiary-balance" data-operation="get-subsidiary-balance">
+  <div class="op-header">
+    <h3 class="op-name">Get a subsidiary account balance</h3>
+    <a class="op-anchor" href="#op-get-subsidiary-balance" aria-label="Link to Get a subsidiary account balance">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">GET /subsidiary-accounts/{accountReference}/balance</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
+  </div>
+  <p>Returns an account's balance.</p>
+  
+  <h4>Rust</h4>
+  <p><code>get_subsidiary_balance</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-get-subsidiary-balance" type="button">Copy</button><pre><code id="code-rust-get-subsidiary-balance" class="language-rust">let balance = client
+    .get_subsidiary_balance(&quot;CUST-000184-WALLET&quot;, &quot;REF-BAL-001&quot;)
+    .await?;
+println!(&quot;{:?}&quot;, balance.balance);</code></pre></div>
+</article>
+
+<article class="op" id="op-get-subsidiary-history" data-operation="get-subsidiary-history">
+  <div class="op-header">
+    <h3 class="op-name">Get a subsidiary account history</h3>
+    <a class="op-anchor" href="#op-get-subsidiary-history" aria-label="Link to Get a subsidiary account history">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag tag-collect">Collect API</span>
+    <span class="tag tag-endpoint">GET /subsidiary-accounts/{accountReference}/history</span>
+    <span class="tag ">HTTP Basic</span>
+    <span class="tag tag-endpoint">accountIdentifier + startDateTimeUTC + endDateTimeUTC</span>
+  </div>
+  <p>Returns an account's transactions.</p>
+  <ul><li>Up to three months at a time.</li>
+<li>Pages start at <code>0</code>.</li>
+<li><code>referenceNumber</code> is required as a query parameter, but is not part of the hash.</li></ul>
+  <h4>Rust</h4>
+  <p><code>get_subsidiary_history</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-get-subsidiary-history" type="button">Copy</button><pre><code id="code-rust-get-subsidiary-history" class="language-rust">let history = client
+    .get_subsidiary_history(GetSubsidiaryHistory::new(
+        &quot;CUST-000184-WALLET&quot;,
+        &quot;REF-HIS-001&quot;,
+        &quot;2026-06-01T00:00:00&quot;,
+        &quot;2026-06-30T23:59:59&quot;,
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<h2 id="next">Next</h2>
+<ul>
+<li><a href="checkout.html">Checkout</a></li>
+<li><a href="collection.html">Dynamic virtual account, Bank USSD, Paga wallet and USD bank transfer</a></li>
+<li><a href="refunds.html">Refunds</a></li>
+<li><a href="direct-debit.html">Direct Debit (Open Banking)</a></li>
+<li><a href="money-transfer.html">Money Transfer</a></li>
+<li><a href="airtime.html">Airtime and data</a></li>
+<li><a href="bill-payment.html">Bill payment (VAS)</a></li>
+<li><a href="status.html">Check the transaction status</a></li>
+<li><a href="business-account.html">Your business account</a></li>
+<li><a href="persistent.html">Persistent payment accounts</a></li>
+<li><a href="customers.html">Customer registration and KYC</a></li>
+  <li><a href="reference.html">All operations</a></li>
+</ul>
+  </main>
+  <footer class="footer">
+    <span>Unofficial community documentation. Not built, endorsed or supported by Paga.</span>
+    <nav aria-label="Footer">
+      <a href="https://github.com/TeamTrustBridge/paga-rs">paga-rs on GitHub</a>
+      <a href="operations.json">operations.json</a>
+      <a href="llms.txt">llms.txt</a>
+      <a href="https://github.com/TeamTrustBridge/paga">All Paga SDKs</a>
+    </nav>
+  </footer>
+</div>
+</div>
+<script src="assets/script.js" defer></script>
+</body>
+</html>

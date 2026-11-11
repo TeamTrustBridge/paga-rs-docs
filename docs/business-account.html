@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Your business account — paga-rs</title>
+<meta name="description" content="Your own balance, transaction history, merchant onboarding and cash dispensing. 6 operations in the Rust SDK for the Paga Engine API.">
+<link rel="canonical" href="https://teamtrustbridge.github.io/paga-rs-docs/business-account.html">
+<meta property="og:title" content="Your business account — paga-rs">
+<meta property="og:description" content="Your own balance, transaction history, merchant onboarding and cash dispensing. 6 operations in the Rust SDK for the Paga Engine API.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://teamtrustbridge.github.io/paga-rs-docs/business-account.html">
+<meta name="generator" content="paga-docs-builder">
+<link rel="stylesheet" href="assets/style.css">
+
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+<div class="layout">
+<nav class="sidebar" aria-label="Documentation">
+  <a class="brand" href="index.html">
+    <span class="brand-name">Paga Engine</span>
+    <span class="brand-language">Rust</span>
+  </a>
+  <li><a href="index.html">Getting started</a></li>
+<div class="nav-group"><p class="nav-heading">Accept payments</p><ul class="nav-list">
+<li><a href="checkout.html">Checkout</a></li>
+<li><a href="collection.html">Collection</a></li>
+<li><a href="refunds.html">Refunds</a></li>
+<li><a href="direct-debit.html">Direct Debit</a></li>
+</ul></div>
+<div class="nav-group"><p class="nav-heading">Make payments</p><ul class="nav-list">
+<li><a href="money-transfer.html">Money Transfer</a></li>
+<li><a href="airtime.html">Airtime and data</a></li>
+<li><a href="bill-payment.html">Bill payment</a></li>
+<li><a href="status.html">Transaction status</a></li>
+</ul></div>
+<div class="nav-group"><p class="nav-heading">Manage accounts</p><ul class="nav-list">
+<li><a href="business-account.html" aria-current="page">Business account</a></li>
+<li><a href="subsidiary.html">Subsidiary accounts</a></li>
+<li><a href="persistent.html">Persistent accounts</a></li>
+<li><a href="customers.html">Customers</a></li>
+</ul></div>
+<div class="nav-group"><p class="nav-heading">Reference</p><ul class="nav-list">
+<li><a href="reference.html">All operations</a></li>
+<li><a href="webhooks.html">Webhooks</a></li>
+</ul></div>
+</nav>
+<div class="main">
+  <div class="topbar">
+    <button class="button menu-toggle" data-menu-toggle type="button" aria-expanded="false" aria-label="Toggle navigation">Menu</button>
+    <span class="topbar-spacer"></span>
+    <button class="button" data-theme-toggle type="button" aria-label="Toggle the colour theme">☾</button>
+  </div>
+  <main class="content" id="main">
+<h1>Your business account</h1>
+<p class="lead">Your own balance, transaction history, merchant onboarding and cash dispensing.</p>
+
+<p>The business account is your own. Read the balance before a payout run, reconcile against the transaction history, and onboard the merchants you aggregate.</p>
+
+<h2 id="operations">Operations</h2>
+<article class="op" id="op-get-business-balance" data-operation="get-business-balance">
+  <div class="op-header">
+    <h3 class="op-name">Check the business account balance</h3>
+    <a class="op-anchor" href="#op-get-business-balance" aria-label="Link to Check the business account balance">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag ">Business API</span>
+    <span class="tag tag-endpoint">POST /accountBalance</span>
+    <span class="tag ">principal / credentials headers</span>
+    <span class="tag tag-endpoint">referenceNumber</span>
+  </div>
+  <p>Returns the business account balance.</p>
+  <ul><li>Check <code>availableBalance</code>, not <code>totalBalance</code>, before a payout run — it is what you can actually send.</li></ul>
+  <h4>Rust</h4>
+  <p><code>get_business_balance</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-get-business-balance" type="button">Copy</button><pre><code id="code-rust-get-business-balance" class="language-rust">let balance = client.get_business_balance(&quot;BAL-2026-0042&quot;).await?;
+println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
+</article>
+
+<article class="op" id="op-get-business-transactions" data-operation="get-business-transactions">
+  <div class="op-header">
+    <h3 class="op-name">Get the transaction history</h3>
+    <a class="op-anchor" href="#op-get-business-transactions" aria-label="Link to Get the transaction history">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag ">Business API</span>
+    <span class="tag tag-endpoint">POST /transactionHistory</span>
+    <span class="tag ">principal / credentials headers</span>
+    <span class="tag tag-endpoint">referenceNumber</span>
+  </div>
+  <p>Returns every transaction on the business account between two dates: money in, money out and fees, up to 10,000 at a time.</p>
+  <ul><li>Use it to reconcile your records with Paga's.</li></ul>
+  <h4>Rust</h4>
+  <p><code>get_business_transactions</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-get-business-transactions" type="button">Copy</button><pre><code id="code-rust-get-business-transactions" class="language-rust">let history = client
+    .get_business_transactions(GetBusinessTransactions::new(
+        &quot;HIS-2026-0042&quot;,
+        &quot;2026-11-01T00:00:00&quot;,
+        &quot;2026-11-04T00:00:00&quot;,
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-get-recent-transactions" data-operation="get-recent-transactions">
+  <div class="op-header">
+    <h3 class="op-name">Get the recent transactions</h3>
+    <a class="op-anchor" href="#op-get-recent-transactions" aria-label="Link to Get the recent transactions">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag ">Business API</span>
+    <span class="tag tag-endpoint">POST /recentTransactionHistory</span>
+    <span class="tag ">principal / credentials headers</span>
+    <span class="tag tag-endpoint">referenceNumber</span>
+  </div>
+  <p>Returns the last five transactions on the business account, newest first, without a date range.</p>
+  <ul><li>For anything further back, use the transaction history endpoint.</li></ul>
+  <h4>Rust</h4>
+  <p><code>get_recent_transactions</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-get-recent-transactions" type="button">Copy</button><pre><code id="code-rust-get-recent-transactions" class="language-rust">let recent = client
+    .get_recent_transactions(GetRecentTransactions::new(&quot;REF-000001&quot;))
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-get-operation-status" data-operation="get-operation-status">
+  <div class="op-header">
+    <h3 class="op-name">Check an operation's status</h3>
+    <a class="op-anchor" href="#op-get-operation-status" aria-label="Link to Check an operation&#39;s status">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag ">Business API</span>
+    <span class="tag tag-endpoint">POST /getOperationStatus</span>
+    <span class="tag ">principal / credentials headers</span>
+    <span class="tag tag-endpoint">referenceNumber</span>
+  </div>
+  <p>Returns the status of a business operation.</p>
+  <ul><li>The status is in <code>transactionStatus</code>, not <code>status</code>.</li></ul>
+  <h4>Rust</h4>
+  <p><code>get_operation_status</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-get-operation-status" type="button">Copy</button><pre><code id="code-rust-get-operation-status" class="language-rust">let status = client
+    .get_operation_status(GetTransactionStatus::new(&quot;PAY-2026-0311&quot;))
+    .await?;
+println!(&quot;{:?}&quot;, status.transaction_status);</code></pre></div>
+</article>
+
+<article class="op" id="op-onboard-merchant" data-operation="onboard-merchant">
+  <div class="op-header">
+    <h3 class="op-name">Onboard a merchant</h3>
+    <a class="op-anchor" href="#op-onboard-merchant" aria-label="Link to Onboard a merchant">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag ">Business API</span>
+    <span class="tag tag-endpoint">POST /onboardMerchant</span>
+    <span class="tag ">principal / credentials headers</span>
+    <span class="tag tag-endpoint">referenceNumber + merchantExternalId + name + phone + email</span>
+  </div>
+  <p>Onboards a merchant and returns the credentials Paga issues for it.</p>
+  <ul><li>For aggregators only.</li>
+<li>Paga names the request field <code>reference</code>, not <code>referenceNumber</code>.</li></ul>
+  <h4>Rust</h4>
+  <p><code>onboard_merchant</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-onboard-merchant" type="button">Copy</button><pre><code id="code-rust-onboard-merchant" class="language-rust">let merchant = client
+    .onboard_merchant(OnboardMerchant::new(
+        &quot;REF-000001&quot;,
+        &quot;MERCH-1&quot;,
+        serde_json::json!({ &quot;name&quot;: &quot;Acme Ltd&quot; }),
+        serde_json::json!({
+            &quot;firstName&quot;: &quot;Bello&quot;,
+            &quot;lastName&quot;: &quot;Ramon&quot;,
+            &quot;phone&quot;: &quot;08064343187&quot;,
+            &quot;email&quot;: &quot;director@example.com&quot;,
+            &quot;dateOfBirth&quot;: &quot;1989-10-02&quot;,
+        }),
+        serde_json::json!({
+            &quot;type&quot;: &quot;EMAIL_NOTIFICATION&quot;,
+            &quot;financeAdminEmail&quot;: &quot;finance@example.com&quot;,
+        }),
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<article class="op" id="op-dispense-cash" data-operation="dispense-cash">
+  <div class="op-header">
+    <h3 class="op-name">Dispense cash</h3>
+    <a class="op-anchor" href="#op-dispense-cash" aria-label="Link to Dispense cash">#</a>
+  </div>
+  <div class="meta">
+    <span class="tag ">Business API</span>
+    <span class="tag tag-endpoint">POST /dispenseCash</span>
+    <span class="tag ">principal / credentials headers</span>
+    <span class="tag tag-endpoint">referenceNumber + customerPhoneNumber + amount + withdrawalCode</span>
+  </div>
+  <p>Dispenses cash against a customer's withdrawal code.</p>
+  
+  <h4>Rust</h4>
+  <p><code>dispense_cash</code></p>
+  <div class="code-block"><button class="button" data-copy="#code-rust-dispense-cash" type="button">Copy</button><pre><code id="code-rust-dispense-cash" class="language-rust">let cash = client
+    .dispense_cash(DispenseCash::new(
+        &quot;CASH-2026-0042&quot;,
+        &quot;08064343187&quot;,
+        5000.0,
+        &quot;123456&quot;,
+    ))
+    .await?;</code></pre></div>
+</article>
+
+<h2 id="next">Next</h2>
+<ul>
+<li><a href="checkout.html">Checkout</a></li>
+<li><a href="collection.html">Dynamic virtual account, Bank USSD, Paga wallet and USD bank transfer</a></li>
+<li><a href="refunds.html">Refunds</a></li>
+<li><a href="direct-debit.html">Direct Debit (Open Banking)</a></li>
+<li><a href="money-transfer.html">Money Transfer</a></li>
+<li><a href="airtime.html">Airtime and data</a></li>
+<li><a href="bill-payment.html">Bill payment (VAS)</a></li>
+<li><a href="status.html">Check the transaction status</a></li>
+<li><a href="subsidiary.html">Subsidiary accounts</a></li>
+<li><a href="persistent.html">Persistent payment accounts</a></li>
+<li><a href="customers.html">Customer registration and KYC</a></li>
+  <li><a href="reference.html">All operations</a></li>
+</ul>
+  </main>
+  <footer class="footer">
+    <span>Unofficial community documentation. Not built, endorsed or supported by Paga.</span>
+    <nav aria-label="Footer">
+      <a href="https://github.com/TeamTrustBridge/paga-rs">paga-rs on GitHub</a>
+      <a href="operations.json">operations.json</a>
+      <a href="llms.txt">llms.txt</a>
+      <a href="https://github.com/TeamTrustBridge/paga">All Paga SDKs</a>
+    </nav>
+  </footer>
+</div>
+</div>
+<script src="assets/script.js" defer></script>
+</body>
+</html>
