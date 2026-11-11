@@ -58,6 +58,8 @@
 
 <p>Checkout is the hosted flow: you send the customer to a Paga page and Paga handles the payment instrument. Use it when you want Paga to own the payment UI rather than building your own.</p>
 
+
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-verify-charge" data-operation="verify-charge">
   <div class="op-header">
@@ -66,7 +68,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /checkout/transaction/verify</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/checkout/transaction/verify</span>
     <span class="tag ">HTTP Basic</span>
     
   </div>
@@ -75,11 +77,11 @@
 <li>A pending charge is a legitimate answer, so the response is returned rather than raised.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_charge</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-verify-charge" type="button">Copy</button><pre><code id="code-rust-verify-charge" class="language-rust">let verified = client
-    .verify_charge(&quot;PAY-2026-0311&quot;, &quot;YOUR_PUBLIC_KEY&quot;, 50.0)
-    .await?;
-if verified.status_code == Some(0) {
-    println!(&quot;paid&quot;);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-verify-charge" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-verify-charge" class="language-rust"><span class="tok-kw">let</span> verified = client
+    .<span class="tok-fn">verify_charge</span>(<span class="tok-str">&quot;PAY-2026-0311&quot;</span>, <span class="tok-str">&quot;YOUR_PUBLIC_KEY&quot;</span>, <span class="tok-num">50.0</span>)
+    .<span class="tok-kw">await</span>?;
+<span class="tok-kw">if</span> verified.status_code == <span class="tok-bi">Some</span>(<span class="tok-num">0</span>) {
+    println!(<span class="tok-str">&quot;paid&quot;</span>);
 }</code></pre></div>
 </article>
 

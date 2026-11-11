@@ -58,6 +58,17 @@
 
 <p>A payment request tells Paga to collect a specific amount from a specific customer. How the customer pays is up to you: a one-time virtual account number, a USSD prompt, their Paga wallet, or a USD bank transfer.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-create-payment">Create a payment request</a></li>
+    <li><a href="#op-get-payment-status">Check payment status</a></li>
+    <li><a href="#op-get-collect-banks">List the customer's banks</a></li>
+    <li><a href="#op-get-usd-payment-status">Check USD payment status</a></li>
+    <li><a href="#op-get-payment-request-history">Payment request history</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-create-payment" data-operation="create-payment">
   <div class="op-header">
@@ -66,7 +77,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /paymentRequest</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/paymentRequest</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + amount + currency + payer.phoneNumber + payer.email</span>
   </div>
@@ -75,15 +86,15 @@
 <li><code>payer.email</code> takes part in the hash even when you omit it.</li></ul>
   <h4>Rust</h4>
   <p><code>create_payment</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-create-payment" type="button">Copy</button><pre><code id="code-rust-create-payment" class="language-rust">let payment = client
-    .create_payment(CreatePayment::new(
-        &quot;ORD-2026-0187&quot;,
-        50.0,
-        &quot;Bello Ramon&quot;,
-        &quot;08064343187&quot;,
-        &quot;Your business name&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-create-payment" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-create-payment" class="language-rust"><span class="tok-kw">let</span> payment = client
+    .<span class="tok-fn">create_payment</span>(<span class="tok-ty">CreatePayment</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;ORD-2026-0187&quot;</span>,
+        <span class="tok-num">50.0</span>,
+        <span class="tok-str">&quot;Bello Ramon&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
+        <span class="tok-str">&quot;Your business name&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-payment-status" data-operation="get-payment-status">
@@ -93,7 +104,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /status</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/status</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -101,9 +112,9 @@
   <ul><li><code>data.statusCode</code> of <code>&quot;0&quot;</code> means the payment was paid.</li></ul>
   <h4>Rust</h4>
   <p><code>get_payment_status</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-payment-status" type="button">Copy</button><pre><code id="code-rust-get-payment-status" class="language-rust">let status = client.get_payment_status(&quot;ORD-2026-0187&quot;).await?;
-if status.data.as_ref().and_then(|d| d.status_code.as_deref()) == Some(&quot;0&quot;) {
-    println!(&quot;paid&quot;);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-payment-status" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-payment-status" class="language-rust"><span class="tok-kw">let</span> status = client.<span class="tok-fn">get_payment_status</span>(<span class="tok-str">&quot;ORD-2026-0187&quot;</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">if</span> status.data.<span class="tok-fn">as_ref</span>().<span class="tok-fn">and_then</span>(|d| d.status_code.<span class="tok-fn">as_deref</span>()) == <span class="tok-bi">Some</span>(<span class="tok-str">&quot;0&quot;</span>) {
+    println!(<span class="tok-str">&quot;paid&quot;</span>);
 }</code></pre></div>
 </article>
 
@@ -114,7 +125,7 @@ if status.data.as_ref().and_then(|d| d.status_code.as_deref()) == Some(&quot;0&q
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /banks</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/banks</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -122,9 +133,9 @@ if status.data.as_ref().and_then(|d| d.status_code.as_deref()) == Some(&quot;0&q
   
   <h4>Rust</h4>
   <p><code>get_collect_banks</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-collect-banks" type="button">Copy</button><pre><code id="code-rust-get-collect-banks" class="language-rust">let banks = client.get_collect_banks(&quot;REF-000001&quot;).await?;
-for bank in banks.banks.unwrap_or_default() {
-    println!(&quot;{:?} {:?}&quot;, bank.name, bank.uuid);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-collect-banks" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-collect-banks" class="language-rust"><span class="tok-kw">let</span> banks = client.<span class="tok-fn">get_collect_banks</span>(<span class="tok-str">&quot;REF-000001&quot;</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">for</span> bank <span class="tok-kw">in</span> banks.banks.<span class="tok-fn">unwrap_or_default</span>() {
+    println!(<span class="tok-str">&quot;{:?} {:?}&quot;</span>, bank.name, bank.uuid);
 }</code></pre></div>
 </article>
 
@@ -135,7 +146,7 @@ for bank in banks.banks.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /status</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/status</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + paymentCurrency</span>
   </div>
@@ -143,9 +154,9 @@ for bank in banks.banks.unwrap_or_default() {
   <ul><li><code>data.statusCode</code> of <code>&quot;1&quot;</code> means the payment is still pending.</li></ul>
   <h4>Rust</h4>
   <p><code>get_usd_payment_status</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-usd-payment-status" type="button">Copy</button><pre><code id="code-rust-get-usd-payment-status" class="language-rust">let status = client
-    .get_usd_payment_status(&quot;ORD-2026-0187&quot;, &quot;USD&quot;)
-    .await?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-usd-payment-status" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-usd-payment-status" class="language-rust"><span class="tok-kw">let</span> status = client
+    .<span class="tok-fn">get_usd_payment_status</span>(<span class="tok-str">&quot;ORD-2026-0187&quot;</span>, <span class="tok-str">&quot;USD&quot;</span>)
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-payment-request-history" data-operation="get-payment-request-history">
@@ -155,7 +166,7 @@ for bank in banks.banks.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /history</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/history</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -163,7 +174,7 @@ for bank in banks.banks.unwrap_or_default() {
   
   <h4>Rust</h4>
   <p><code>get_payment_request_history</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-payment-request-history" type="button">Copy</button><pre><code id="code-rust-get-payment-request-history" class="language-rust">let history = client.get_payment_request_history(&quot;REF-000001&quot;).await?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-payment-request-history" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-payment-request-history" class="language-rust"><span class="tok-kw">let</span> history = client.<span class="tok-fn">get_payment_request_history</span>(<span class="tok-str">&quot;REF-000001&quot;</span>).<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

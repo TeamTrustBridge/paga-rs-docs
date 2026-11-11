@@ -53,8 +53,15 @@
     <button class="button" data-theme-toggle type="button" aria-label="Toggle the colour theme">☾</button>
   </div>
   <main class="content" id="main">
+<div class="hero">
+<p class="hero-eyebrow">Unofficial community SDK</p>
 <h1>paga-rs</h1>
-<p class="lead">Unofficial async Rust SDK for the <a href="https://developer-docs.paga.com/">Paga Engine API</a>.</p>
+<p class="hero-lead">Async Rust SDK for the <a href="https://developer-docs.paga.com/">Paga Engine API</a> — 50 operations and 9 webhook verifiers, organised exactly like Paga's own documentation.</p>
+<div class="hero-actions">
+  <a class="button" href="reference.html">Browse the API reference</a>
+  <a class="button" href="accept-payments.html">Start with accepting payments</a>
+</div>
+</div>
 
 <div class="callout">
   <p class="callout-title">This is an unofficial SDK</p>
@@ -62,30 +69,30 @@
 </div>
 
 <h2 id="install">Install</h2>
-<div class="code-block"><button class="button" data-copy="#code-rust-install" type="button">Copy</button><pre><code id="code-rust-install" class="language-rust">cargo add paga-rs</code></pre></div>
+<div class="code-block"><button class="button copy-button" data-copy="#code-rust-install" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-install" class="language-rust">cargo add paga-rs</code></pre></div>
 <p>The crate is published as <code>paga-rs</code>, but the library is imported as <code>paga</code>.</p>
 
-<div class="code-block"><button class="button" data-copy="#code-rust-import" type="button">Copy</button><pre><code id="code-rust-import" class="language-rust">use paga::{CreatePayment, PagaClient};</code></pre></div>
+<div class="code-block"><button class="button copy-button" data-copy="#code-rust-import" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-import" class="language-rust"><span class="tok-kw">use</span> paga::{<span class="tok-ty">CreatePayment</span>, <span class="tok-ty">PagaClient</span>};</code></pre></div>
 
 <h2 id="quick-start">Quick start</h2>
-<div class="code-block"><button class="button" data-copy="#code-rust-quick-start" type="button">Copy</button><pre><code id="code-rust-quick-start" class="language-rust">let client = PagaClient::new(
-    &quot;YOUR_PUBLIC_KEY&quot;,
-    &quot;YOUR_SECRET_KEY&quot;,
-    &quot;YOUR_HASH_KEY&quot;,
-    &quot;test&quot;,
+<div class="code-block"><button class="button copy-button" data-copy="#code-rust-quick-start" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-quick-start" class="language-rust"><span class="tok-kw">let</span> client = <span class="tok-ty">PagaClient</span>::<span class="tok-fn">new</span>(
+    <span class="tok-str">&quot;YOUR_PUBLIC_KEY&quot;</span>,
+    <span class="tok-str">&quot;YOUR_SECRET_KEY&quot;</span>,
+    <span class="tok-str">&quot;YOUR_HASH_KEY&quot;</span>,
+    <span class="tok-str">&quot;test&quot;</span>,
 )?;
 
-let payment = client
-    .create_payment(CreatePayment::new(
-        &quot;ORD-2026-0187&quot;,
-        50.0,
-        &quot;Bello Ramon&quot;,
-        &quot;08064343187&quot;,
-        &quot;Your business name&quot;,
+<span class="tok-kw">let</span> payment = client
+    .<span class="tok-fn">create_payment</span>(<span class="tok-ty">CreatePayment</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;ORD-2026-0187&quot;</span>,
+        <span class="tok-num">50.0</span>,
+        <span class="tok-str">&quot;Bello Ramon&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
+        <span class="tok-str">&quot;Your business name&quot;</span>,
     ))
-    .await?;
+    .<span class="tok-kw">await</span>?;
 
-let status = client.get_payment_status(&quot;ORD-2026-0187&quot;).await?;</code></pre></div>
+<span class="tok-kw">let</span> status = client.<span class="tok-fn">get_payment_status</span>(<span class="tok-str">&quot;ORD-2026-0187&quot;</span>).<span class="tok-kw">await</span>?;</code></pre></div>
 
 <h2 id="what-is-covered">What is covered</h2>
 <p>The SDK wraps 50 documented operations and 9 callbacks, organised by the sections of Paga's own documentation.</p>

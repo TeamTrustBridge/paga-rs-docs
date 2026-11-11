@@ -58,6 +58,14 @@
 
 <p>A refund returns money to the customer. Cancelling a payment request that has not been paid uses the same endpoint — Paga decides which it is from the request's state.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-refund-payment">Refund or cancel a payment request</a></li>
+    <li><a href="#op-get-refund-status">Check refund status</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-refund-payment" data-operation="refund-payment">
   <div class="op-header">
@@ -66,7 +74,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /refund/v2</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/refund/v2</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + refundAmount</span>
   </div>
@@ -75,9 +83,9 @@
 <li>Reusing a <code>referenceNumber</code> returns status code <code>102</code> and never refunds twice.</li></ul>
   <h4>Rust</h4>
   <p><code>refund_payment</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-refund-payment" type="button">Copy</button><pre><code id="code-rust-refund-payment" class="language-rust">let refund = client
-    .refund_payment(RefundPayment::new(&quot;RFD-2026-0031&quot;, &quot;ORD-2026-0187&quot;, 50.0))
-    .await?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-refund-payment" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-refund-payment" class="language-rust"><span class="tok-kw">let</span> refund = client
+    .<span class="tok-fn">refund_payment</span>(<span class="tok-ty">RefundPayment</span>::<span class="tok-fn">new</span>(<span class="tok-str">&quot;RFD-2026-0031&quot;</span>, <span class="tok-str">&quot;ORD-2026-0187&quot;</span>, <span class="tok-num">50.0</span>))
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-refund-status" data-operation="get-refund-status">
@@ -87,7 +95,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /status</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/status</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -95,9 +103,9 @@
   <ul><li><code>data.refundStatus</code> becomes <code>&quot;refunded&quot;</code> once the refund is made.</li></ul>
   <h4>Rust</h4>
   <p><code>get_refund_status</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-refund-status" type="button">Copy</button><pre><code id="code-rust-get-refund-status" class="language-rust">let status = client.get_refund_status(&quot;ORD-2026-0187&quot;).await?;
-if status.is_refunded() {
-    println!(&quot;refunded&quot;);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-refund-status" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-refund-status" class="language-rust"><span class="tok-kw">let</span> status = client.<span class="tok-fn">get_refund_status</span>(<span class="tok-str">&quot;ORD-2026-0187&quot;</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">if</span> status.<span class="tok-fn">is_refunded</span>() {
+    println!(<span class="tok-str">&quot;refunded&quot;</span>);
 }</code></pre></div>
 </article>
 

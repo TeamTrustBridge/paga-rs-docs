@@ -58,6 +58,16 @@
 
 <p>Bill payment takes a customer's account number, confirms it with the biller, and pays. Find the biller, pick the service, validate the customer, then pay.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-get-merchants">List billers</a></li>
+    <li><a href="#op-get-merchant-services">List a biller's services</a></li>
+    <li><a href="#op-get-merchant-account-details">Validate the customer</a></li>
+    <li><a href="#op-pay-bill">Pay the bill</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-get-merchants" data-operation="get-merchants">
   <div class="op-header">
@@ -66,7 +76,7 @@
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /getMerchants</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getMerchants</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -74,9 +84,9 @@
   
   <h4>Rust</h4>
   <p><code>get_merchants</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-merchants" type="button">Copy</button><pre><code id="code-rust-get-merchants" class="language-rust">let merchants = client.get_merchants(&quot;REF-000001&quot;).await?;
-for merchant in merchants.merchants.unwrap_or_default() {
-    println!(&quot;{:?} {:?}&quot;, merchant.display_name, merchant.uuid);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-merchants" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-merchants" class="language-rust"><span class="tok-kw">let</span> merchants = client.<span class="tok-fn">get_merchants</span>(<span class="tok-str">&quot;REF-000001&quot;</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">for</span> merchant <span class="tok-kw">in</span> merchants.merchants.<span class="tok-fn">unwrap_or_default</span>() {
+    println!(<span class="tok-str">&quot;{:?} {:?}&quot;</span>, merchant.display_name, merchant.uuid);
 }</code></pre></div>
 </article>
 
@@ -87,7 +97,7 @@ for merchant in merchants.merchants.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /getMerchantServices</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getMerchantServices</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + merchantPublicId</span>
   </div>
@@ -96,12 +106,12 @@ for merchant in merchants.merchants.unwrap_or_default() {
 <li>A service with <code>price</code> <code>0.0</code> means the customer chooses the amount; otherwise pay the service's <code>price</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>get_merchant_services</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-merchant-services" type="button">Copy</button><pre><code id="code-rust-get-merchant-services" class="language-rust">let services = client
-    .get_merchant_services(
-        &quot;REF-000001&quot;,
-        &quot;A3878DC1-F07D-48E7-AA59-8276C3C26647&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-merchant-services" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-merchant-services" class="language-rust"><span class="tok-kw">let</span> services = client
+    .<span class="tok-fn">get_merchant_services</span>(
+        <span class="tok-str">&quot;REF-000001&quot;</span>,
+        <span class="tok-str">&quot;A3878DC1-F07D-48E7-AA59-8276C3C26647&quot;</span>,
     )
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-merchant-account-details" data-operation="get-merchant-account-details">
@@ -111,7 +121,7 @@ for merchant in merchants.merchants.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /getMerchantAccountDetails</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getMerchantAccountDetails</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + merchantAccount + merchantReferenceNumber + merchantServiceProductCode</span>
   </div>
@@ -120,14 +130,14 @@ for merchant in merchants.merchants.unwrap_or_default() {
 <li>Billers that don't need it still take part in the hash — send <code>&quot;&quot;</code> when there is no service.</li></ul>
   <h4>Rust</h4>
   <p><code>get_merchant_account_details</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-merchant-account-details" type="button">Copy</button><pre><code id="code-rust-get-merchant-account-details" class="language-rust">let customer = client
-    .get_merchant_account_details(
-        &quot;REF-000001&quot;,
-        &quot;A3878DC1-F07D-48E7-AA59-8276C3C26647&quot;,
-        &quot;8110411076&quot;,
-        None,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-merchant-account-details" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-merchant-account-details" class="language-rust"><span class="tok-kw">let</span> customer = client
+    .<span class="tok-fn">get_merchant_account_details</span>(
+        <span class="tok-str">&quot;REF-000001&quot;</span>,
+        <span class="tok-str">&quot;A3878DC1-F07D-48E7-AA59-8276C3C26647&quot;</span>,
+        <span class="tok-str">&quot;8110411076&quot;</span>,
+        <span class="tok-bi">None</span>,
     )
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-pay-bill" data-operation="pay-bill">
@@ -137,7 +147,7 @@ for merchant in merchants.merchants.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /merchantPayment</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/merchantPayment</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + amount + merchantAccount + merchantReferenceNumber</span>
   </div>
@@ -146,14 +156,14 @@ for merchant in merchants.merchants.unwrap_or_default() {
 <li><code>integrationStatus</code> is for information only.</li></ul>
   <h4>Rust</h4>
   <p><code>pay_bill</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-pay-bill" type="button">Copy</button><pre><code id="code-rust-pay-bill" class="language-rust">let bill = client
-    .pay_bill(PayBill::new(
-        &quot;BILL-2026-0042&quot;,
-        6000.0,
-        &quot;A3878DC1-F07D-48E7-AA59-8276C3C26647&quot;,
-        &quot;8110411076&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-pay-bill" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-pay-bill" class="language-rust"><span class="tok-kw">let</span> bill = client
+    .<span class="tok-fn">pay_bill</span>(<span class="tok-ty">PayBill</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;BILL-2026-0042&quot;</span>,
+        <span class="tok-num">6000.0</span>,
+        <span class="tok-str">&quot;A3878DC1-F07D-48E7-AA59-8276C3C26647&quot;</span>,
+        <span class="tok-str">&quot;8110411076&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

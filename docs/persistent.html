@@ -58,6 +58,16 @@
 
 <p>A persistent payment account is the customer-side equivalent of a direct debit mandate, but from the collection side: the customer authorises a debit, you keep taking it.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-register-persistent-payment-account">Register a persistent payment account</a></li>
+    <li><a href="#op-update-persistent-payment-account">Update a persistent payment account</a></li>
+    <li><a href="#op-get-persistent-payment-account">Get a persistent payment account</a></li>
+    <li><a href="#op-delete-persistent-payment-account">Delete a persistent payment account</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-register-persistent-payment-account" data-operation="register-persistent-payment-account">
   <div class="op-header">
@@ -66,7 +76,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /registerPersistentPaymentAccount</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/registerPersistentPaymentAccount</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountReference + financialIdentificationNumber + creditBankId + creditBankAccountNumber + callbackUrl</span>
   </div>
@@ -75,18 +85,18 @@
 <li>Paga calls your <code>callbackUrl</code> whenever the account is funded.</li></ul>
   <h4>Rust</h4>
   <p><code>register_persistent_payment_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-register-persistent-payment-account" type="button">Copy</button><pre><code id="code-rust-register-persistent-payment-account" class="language-rust">let account = client
-    .register_persistent_payment_account(
-        RegisterPersistentPaymentAccount::new(
-            &quot;REF-000006&quot;,
-            &quot;CUST-000184-WALLET&quot;,
-            &quot;22222132329&quot;,
-            &quot;40090E2F-7446-4217-9345-7BBAB7043C4C&quot;,
-            &quot;0000000000&quot;,
-            &quot;https://yourstore.com/webhooks/paga&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-register-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-register-persistent-payment-account" class="language-rust"><span class="tok-kw">let</span> account = client
+    .<span class="tok-fn">register_persistent_payment_account</span>(
+        <span class="tok-ty">RegisterPersistentPaymentAccount</span>::<span class="tok-fn">new</span>(
+            <span class="tok-str">&quot;REF-000006&quot;</span>,
+            <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+            <span class="tok-str">&quot;22222132329&quot;</span>,
+            <span class="tok-str">&quot;40090E2F-7446-4217-9345-7BBAB7043C4C&quot;</span>,
+            <span class="tok-str">&quot;0000000000&quot;</span>,
+            <span class="tok-str">&quot;https://yourstore.com/webhooks/paga&quot;</span>,
         ),
     )
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-update-persistent-payment-account" data-operation="update-persistent-payment-account">
@@ -96,7 +106,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /updatePersistentPaymentAccount</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/updatePersistentPaymentAccount</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier + financialIdentificationNumber + creditBankId + creditBankAccountNumber + callbackUrl</span>
   </div>
@@ -104,14 +114,14 @@
   <ul><li>Every field takes part in the hash, so send the current value of the ones you are not changing.</li></ul>
   <h4>Rust</h4>
   <p><code>update_persistent_payment_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-update-persistent-payment-account" type="button">Copy</button><pre><code id="code-rust-update-persistent-payment-account" class="language-rust">let account = client
-    .update_persistent_payment_account(
-        UpdatePersistentPaymentAccount::new(
-            &quot;REF-000007&quot;,
-            &quot;CUST-000184-WALLET&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-update-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-update-persistent-payment-account" class="language-rust"><span class="tok-kw">let</span> account = client
+    .<span class="tok-fn">update_persistent_payment_account</span>(
+        <span class="tok-ty">UpdatePersistentPaymentAccount</span>::<span class="tok-fn">new</span>(
+            <span class="tok-str">&quot;REF-000007&quot;</span>,
+            <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
         ),
     )
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-persistent-payment-account" data-operation="get-persistent-payment-account">
@@ -121,7 +131,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /getPersistentPaymentAccount</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getPersistentPaymentAccount</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
   </div>
@@ -129,9 +139,9 @@
   <ul><li>The <code>accountIdentifier</code> accepts a NUBAN **or** an <code>accountReference</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>get_persistent_payment_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-persistent-payment-account" type="button">Copy</button><pre><code id="code-rust-get-persistent-payment-account" class="language-rust">let account = client
-    .get_persistent_payment_account(&quot;REF-000008&quot;, &quot;CUST-000184-WALLET&quot;)
-    .await?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-persistent-payment-account" class="language-rust"><span class="tok-kw">let</span> account = client
+    .<span class="tok-fn">get_persistent_payment_account</span>(<span class="tok-str">&quot;REF-000008&quot;</span>, <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>)
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-delete-persistent-payment-account" data-operation="delete-persistent-payment-account">
@@ -141,7 +151,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /deletePersistentPaymentAccount</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/deletePersistentPaymentAccount</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
   </div>
@@ -149,9 +159,9 @@
   <ul><li>The <code>accountIdentifier</code> accepts a NUBAN **or** an <code>accountReference</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>delete_persistent_payment_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-delete-persistent-payment-account" type="button">Copy</button><pre><code id="code-rust-delete-persistent-payment-account" class="language-rust">client
-    .delete_persistent_payment_account(&quot;REF-000009&quot;, &quot;CUST-000184-WALLET&quot;)
-    .await?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-delete-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-delete-persistent-payment-account" class="language-rust">client
+    .<span class="tok-fn">delete_persistent_payment_account</span>(<span class="tok-str">&quot;REF-000009&quot;</span>, <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>)
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

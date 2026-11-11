@@ -58,6 +58,18 @@
 
 <p>The business account is your own. Read the balance before a payout run, reconcile against the transaction history, and onboard the merchants you aggregate.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-get-business-balance">Check the business account balance</a></li>
+    <li><a href="#op-get-business-transactions">Get the transaction history</a></li>
+    <li><a href="#op-get-recent-transactions">Get the recent transactions</a></li>
+    <li><a href="#op-get-operation-status">Check an operation's status</a></li>
+    <li><a href="#op-onboard-merchant">Onboard a merchant</a></li>
+    <li><a href="#op-dispense-cash">Dispense cash</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-get-business-balance" data-operation="get-business-balance">
   <div class="op-header">
@@ -66,7 +78,7 @@
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /accountBalance</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/accountBalance</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -74,8 +86,8 @@
   <ul><li>Check <code>availableBalance</code>, not <code>totalBalance</code>, before a payout run — it is what you can actually send.</li></ul>
   <h4>Rust</h4>
   <p><code>get_business_balance</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-business-balance" type="button">Copy</button><pre><code id="code-rust-get-business-balance" class="language-rust">let balance = client.get_business_balance(&quot;BAL-2026-0042&quot;).await?;
-println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-business-balance" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-business-balance" class="language-rust"><span class="tok-kw">let</span> balance = client.<span class="tok-fn">get_business_balance</span>(<span class="tok-str">&quot;BAL-2026-0042&quot;</span>).<span class="tok-kw">await</span>?;
+println!(<span class="tok-str">&quot;{:?}&quot;</span>, balance.available_balance);</code></pre></div>
 </article>
 
 <article class="op" id="op-get-business-transactions" data-operation="get-business-transactions">
@@ -85,7 +97,7 @@ println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /transactionHistory</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/transactionHistory</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -93,13 +105,13 @@ println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
   <ul><li>Use it to reconcile your records with Paga's.</li></ul>
   <h4>Rust</h4>
   <p><code>get_business_transactions</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-business-transactions" type="button">Copy</button><pre><code id="code-rust-get-business-transactions" class="language-rust">let history = client
-    .get_business_transactions(GetBusinessTransactions::new(
-        &quot;HIS-2026-0042&quot;,
-        &quot;2026-11-01T00:00:00&quot;,
-        &quot;2026-11-04T00:00:00&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-business-transactions" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-business-transactions" class="language-rust"><span class="tok-kw">let</span> history = client
+    .<span class="tok-fn">get_business_transactions</span>(<span class="tok-ty">GetBusinessTransactions</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;HIS-2026-0042&quot;</span>,
+        <span class="tok-str">&quot;2026-11-01T00:00:00&quot;</span>,
+        <span class="tok-str">&quot;2026-11-04T00:00:00&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-recent-transactions" data-operation="get-recent-transactions">
@@ -109,7 +121,7 @@ println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /recentTransactionHistory</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/recentTransactionHistory</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -117,9 +129,9 @@ println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
   <ul><li>For anything further back, use the transaction history endpoint.</li></ul>
   <h4>Rust</h4>
   <p><code>get_recent_transactions</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-recent-transactions" type="button">Copy</button><pre><code id="code-rust-get-recent-transactions" class="language-rust">let recent = client
-    .get_recent_transactions(GetRecentTransactions::new(&quot;REF-000001&quot;))
-    .await?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-recent-transactions" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-recent-transactions" class="language-rust"><span class="tok-kw">let</span> recent = client
+    .<span class="tok-fn">get_recent_transactions</span>(<span class="tok-ty">GetRecentTransactions</span>::<span class="tok-fn">new</span>(<span class="tok-str">&quot;REF-000001&quot;</span>))
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-operation-status" data-operation="get-operation-status">
@@ -129,7 +141,7 @@ println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /getOperationStatus</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getOperationStatus</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -137,10 +149,10 @@ println!(&quot;{:?}&quot;, balance.available_balance);</code></pre></div>
   <ul><li>The status is in <code>transactionStatus</code>, not <code>status</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>get_operation_status</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-operation-status" type="button">Copy</button><pre><code id="code-rust-get-operation-status" class="language-rust">let status = client
-    .get_operation_status(GetTransactionStatus::new(&quot;PAY-2026-0311&quot;))
-    .await?;
-println!(&quot;{:?}&quot;, status.transaction_status);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-operation-status" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-operation-status" class="language-rust"><span class="tok-kw">let</span> status = client
+    .<span class="tok-fn">get_operation_status</span>(<span class="tok-ty">GetTransactionStatus</span>::<span class="tok-fn">new</span>(<span class="tok-str">&quot;PAY-2026-0311&quot;</span>))
+    .<span class="tok-kw">await</span>?;
+println!(<span class="tok-str">&quot;{:?}&quot;</span>, status.transaction_status);</code></pre></div>
 </article>
 
 <article class="op" id="op-onboard-merchant" data-operation="onboard-merchant">
@@ -150,7 +162,7 @@ println!(&quot;{:?}&quot;, status.transaction_status);</code></pre></div>
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /onboardMerchant</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/onboardMerchant</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + merchantExternalId + name + phone + email</span>
   </div>
@@ -159,24 +171,24 @@ println!(&quot;{:?}&quot;, status.transaction_status);</code></pre></div>
 <li>Paga names the request field <code>reference</code>, not <code>referenceNumber</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>onboard_merchant</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-onboard-merchant" type="button">Copy</button><pre><code id="code-rust-onboard-merchant" class="language-rust">let merchant = client
-    .onboard_merchant(OnboardMerchant::new(
-        &quot;REF-000001&quot;,
-        &quot;MERCH-1&quot;,
-        serde_json::json!({ &quot;name&quot;: &quot;Acme Ltd&quot; }),
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-onboard-merchant" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-onboard-merchant" class="language-rust"><span class="tok-kw">let</span> merchant = client
+    .<span class="tok-fn">onboard_merchant</span>(<span class="tok-ty">OnboardMerchant</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000001&quot;</span>,
+        <span class="tok-str">&quot;MERCH-1&quot;</span>,
+        serde_json::json!({ <span class="tok-str">&quot;name&quot;</span>: <span class="tok-str">&quot;Acme Ltd&quot;</span> }),
         serde_json::json!({
-            &quot;firstName&quot;: &quot;Bello&quot;,
-            &quot;lastName&quot;: &quot;Ramon&quot;,
-            &quot;phone&quot;: &quot;08064343187&quot;,
-            &quot;email&quot;: &quot;director@example.com&quot;,
-            &quot;dateOfBirth&quot;: &quot;1989-10-02&quot;,
+            <span class="tok-str">&quot;firstName&quot;</span>: <span class="tok-str">&quot;Bello&quot;</span>,
+            <span class="tok-str">&quot;lastName&quot;</span>: <span class="tok-str">&quot;Ramon&quot;</span>,
+            <span class="tok-str">&quot;phone&quot;</span>: <span class="tok-str">&quot;08064343187&quot;</span>,
+            <span class="tok-str">&quot;email&quot;</span>: <span class="tok-str">&quot;director@example.com&quot;</span>,
+            <span class="tok-str">&quot;dateOfBirth&quot;</span>: <span class="tok-str">&quot;1989-10-02&quot;</span>,
         }),
         serde_json::json!({
-            &quot;type&quot;: &quot;EMAIL_NOTIFICATION&quot;,
-            &quot;financeAdminEmail&quot;: &quot;finance@example.com&quot;,
+            <span class="tok-str">&quot;type&quot;</span>: <span class="tok-str">&quot;EMAIL_NOTIFICATION&quot;</span>,
+            <span class="tok-str">&quot;financeAdminEmail&quot;</span>: <span class="tok-str">&quot;finance@example.com&quot;</span>,
         }),
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-dispense-cash" data-operation="dispense-cash">
@@ -186,7 +198,7 @@ println!(&quot;{:?}&quot;, status.transaction_status);</code></pre></div>
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /dispenseCash</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/dispenseCash</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + customerPhoneNumber + amount + withdrawalCode</span>
   </div>
@@ -194,14 +206,14 @@ println!(&quot;{:?}&quot;, status.transaction_status);</code></pre></div>
   
   <h4>Rust</h4>
   <p><code>dispense_cash</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-dispense-cash" type="button">Copy</button><pre><code id="code-rust-dispense-cash" class="language-rust">let cash = client
-    .dispense_cash(DispenseCash::new(
-        &quot;CASH-2026-0042&quot;,
-        &quot;08064343187&quot;,
-        5000.0,
-        &quot;123456&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-dispense-cash" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-dispense-cash" class="language-rust"><span class="tok-kw">let</span> cash = client
+    .<span class="tok-fn">dispense_cash</span>(<span class="tok-ty">DispenseCash</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;CASH-2026-0042&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
+        <span class="tok-num">5000.0</span>,
+        <span class="tok-str">&quot;123456&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

@@ -61,6 +61,21 @@
   <p>Verify the signature before you act on a callback. Then de-duplicate: Paga retries until you answer, so the same callback will arrive more than once.</p>
 </div>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-checkout-notification">Checkout payment notification</a></li>
+    <li><a href="#op-payment-callback">Dynamic virtual account callback</a></li>
+    <li><a href="#op-funding-notification">Subsidiary account funding notification</a></li>
+    <li><a href="#op-subsidiary-operation">Subsidiary charge, top-up or transfer callback</a></li>
+    <li><a href="#op-money-transfer-notification">Money transfer notification</a></li>
+    <li><a href="#op-persistent-payment-account">Persistent payment account callback</a></li>
+    <li><a href="#op-mandate-callback">Direct Debit mandate callback</a></li>
+    <li><a href="#op-charge-callback">Direct Debit charge callback</a></li>
+    <li><a href="#op-usd-payment-webhook">USD (ACH, Wire and Swift) payment webhook</a></li>
+  </ul>
+</nav>
+
 <h2 id="callbacks">Callbacks</h2>
 <article class="op" id="op-checkout-notification" data-operation="checkout-notification">
   <div class="op-header">
@@ -76,7 +91,7 @@
   <ul><li>De-duplicate on the payment reference.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_checkout_notification</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-checkout-notification" type="button">Copy</button><pre><code id="code-rust-checkout-notification" class="language-rust">let ok = webhooks::verify_checkout_notification(Some(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-checkout-notification" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-checkout-notification" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_checkout_notification</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
 </article>
 
 <article class="op" id="op-payment-callback" data-operation="payment-callback">
@@ -94,7 +109,7 @@
 <li>De-duplicate on <code>notificationId</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_payment_callback</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-payment-callback" type="button">Copy</button><pre><code id="code-rust-payment-callback" class="language-rust">let ok = webhooks::verify_payment_callback(Some(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-payment-callback" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-payment-callback" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_payment_callback</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
 </article>
 
 <article class="op" id="op-funding-notification" data-operation="funding-notification">
@@ -111,7 +126,7 @@
   <ul><li>The hash travels in the <code>x-paga-hash-v3</code> header, not the body.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_funding_notification</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-funding-notification" type="button">Copy</button><pre><code id="code-rust-funding-notification" class="language-rust">let ok = webhooks::verify_funding_notification(Some(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-funding-notification" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-funding-notification" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_funding_notification</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
 </article>
 
 <article class="op" id="op-subsidiary-operation" data-operation="subsidiary-operation">
@@ -129,7 +144,7 @@
 <li>A transfer sends one callback, for the source account only.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_subsidiary_operation</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-subsidiary-operation" type="button">Copy</button><pre><code id="code-rust-subsidiary-operation" class="language-rust">let ok = webhooks::verify_subsidiary_operation(Some(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-subsidiary-operation" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-subsidiary-operation" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_subsidiary_operation</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
 </article>
 
 <article class="op" id="op-money-transfer-notification" data-operation="money-transfer-notification">
@@ -148,7 +163,7 @@
 <li>De-duplicate on <code>referenceNumber</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_money_transfer_notification</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-money-transfer-notification" type="button">Copy</button><pre><code id="code-rust-money-transfer-notification" class="language-rust">let ok = webhooks::verify_money_transfer_notification(Some(&amp;payload), &amp;received_hash, hash_key, None);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-money-transfer-notification" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-money-transfer-notification" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_money_transfer_notification</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key, <span class="tok-bi">None</span>);</code></pre></div>
 </article>
 
 <article class="op" id="op-persistent-payment-account" data-operation="persistent-payment-account">
@@ -166,7 +181,7 @@
 <li>The <code>x-paga-hash</code> header signs <code>transactionReference + accountNumber + amount</code> instead.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_persistent_payment_account_callback</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-persistent-payment-account" type="button">Copy</button><pre><code id="code-rust-persistent-payment-account" class="language-rust">let ok = webhooks::verify_persistent_payment_account_callback(Some(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-persistent-payment-account" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_persistent_payment_account_callback</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
 </article>
 
 <article class="op" id="op-mandate-callback" data-operation="mandate-callback">
@@ -184,7 +199,7 @@
 <li>De-duplicate on <code>notificationId</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_mandate_callback</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-mandate-callback" type="button">Copy</button><pre><code id="code-rust-mandate-callback" class="language-rust">let ok = webhooks::verify_mandate_callback(Some(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-mandate-callback" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-mandate-callback" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_mandate_callback</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
 </article>
 
 <article class="op" id="op-charge-callback" data-operation="charge-callback">
@@ -202,7 +217,7 @@
 <li>Decide on <code>statusCode</code>, and look up any non-zero code.</li></ul>
   <h4>Rust</h4>
   <p><code>verify_charge_callback</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-charge-callback" type="button">Copy</button><pre><code id="code-rust-charge-callback" class="language-rust">let ok = webhooks::verify_charge_callback(Some(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-charge-callback" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-charge-callback" class="language-rust"><span class="tok-kw">let</span> ok = webhooks::<span class="tok-fn">verify_charge_callback</span>(<span class="tok-bi">Some</span>(&amp;payload), &amp;received_hash, hash_key);</code></pre></div>
 </article>
 
 <article class="op" id="op-usd-payment-webhook" data-operation="usd-payment-webhook">
@@ -220,8 +235,8 @@
 <li>De-duplicate on <code>referenceNumber</code> plus <code>paymentId</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>parse_usd_payment_webhook</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-usd-payment-webhook" type="button">Copy</button><pre><code id="code-rust-usd-payment-webhook" class="language-rust">let webhook = webhooks::parse_usd_payment_webhook(Some(&amp;payload));
-if webhook.is_captured() { /* fulfil */ }</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-usd-payment-webhook" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-usd-payment-webhook" class="language-rust"><span class="tok-kw">let</span> webhook = webhooks::<span class="tok-fn">parse_usd_payment_webhook</span>(<span class="tok-bi">Some</span>(&amp;payload));
+<span class="tok-kw">if</span> webhook.<span class="tok-fn">is_captured</span>() { <span class="tok-com">/* fulfil */</span> }</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

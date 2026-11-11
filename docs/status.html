@@ -58,6 +58,8 @@
 
 <p>Some operations have no callback. The transaction status endpoint tells you where a transaction got to, and it is what you use to resolve an unknown outcome.</p>
 
+
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-get-transaction-status" data-operation="get-transaction-status">
   <div class="op-header">
@@ -66,7 +68,7 @@
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /transactionStatus</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/transactionStatus</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -76,11 +78,11 @@
 <li>The <code>status</code> field is human-readable and may be reworded — branch on <code>responseCode</code>, not on <code>status</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>get_transaction_status</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-transaction-status" type="button">Copy</button><pre><code id="code-rust-get-transaction-status" class="language-rust">let status = client
-    .get_transaction_status(GetTransactionStatus::new(&quot;PAY-2026-0311&quot;))
-    .await?;
-if status.response_code == Some(0) {
-    println!(&quot;settled&quot;);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-transaction-status" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-transaction-status" class="language-rust"><span class="tok-kw">let</span> status = client
+    .<span class="tok-fn">get_transaction_status</span>(<span class="tok-ty">GetTransactionStatus</span>::<span class="tok-fn">new</span>(<span class="tok-str">&quot;PAY-2026-0311&quot;</span>))
+    .<span class="tok-kw">await</span>?;
+<span class="tok-kw">if</span> status.response_code == <span class="tok-bi">Some</span>(<span class="tok-num">0</span>) {
+    println!(<span class="tok-str">&quot;settled&quot;</span>);
 }</code></pre></div>
 </article>
 

@@ -58,6 +58,18 @@
 
 <p>A money transfer moves money from your business balance to somebody else. You can validate the destination first, send in bulk, and check the status afterwards.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-get-banks">List institutions you can pay</a></li>
+    <li><a href="#op-validate-deposit-to-bank">Validate the destination account</a></li>
+    <li><a href="#op-send-money">Send money to a bank account</a></li>
+    <li><a href="#op-transfer-to-paga-wallet">Send money to a Paga wallet</a></li>
+    <li><a href="#op-validate-money-transfer">Validate a Paga wallet transfer</a></li>
+    <li><a href="#op-send-bulk-money-transfer">Bulk money transfer</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-get-banks" data-operation="get-banks">
   <div class="op-header">
@@ -66,7 +78,7 @@
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /getBanks</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getBanks</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -75,9 +87,9 @@
 <li>To send to a Paga wallet, use Paga's UUID <code>AAAAAAAA-AAAA-AAAA-AAAA-AAAAAAAAAAAA</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>get_banks</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-banks" type="button">Copy</button><pre><code id="code-rust-get-banks" class="language-rust">let banks = client.get_banks(&quot;REF-000001&quot;).await?;
-for bank in banks.banks.unwrap_or_default() {
-    println!(&quot;{:?} {:?}&quot;, bank.name, bank.uuid);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-banks" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-banks" class="language-rust"><span class="tok-kw">let</span> banks = client.<span class="tok-fn">get_banks</span>(<span class="tok-str">&quot;REF-000001&quot;</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">for</span> bank <span class="tok-kw">in</span> banks.banks.<span class="tok-fn">unwrap_or_default</span>() {
+    println!(<span class="tok-str">&quot;{:?} {:?}&quot;</span>, bank.name, bank.uuid);
 }</code></pre></div>
 </article>
 
@@ -88,7 +100,7 @@ for bank in banks.banks.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /validateDepositToBank</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/validateDepositToBank</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + amount + destinationBankUUID + destinationBankAccountNumber</span>
   </div>
@@ -96,14 +108,14 @@ for bank in banks.banks.unwrap_or_default() {
   <ul><li>Send <code>amount</code> exactly as you will send it later: <code>&quot;5000.00&quot;</code> and <code>&quot;5000&quot;</code> sign differently.</li></ul>
   <h4>Rust</h4>
   <p><code>validate_deposit_to_bank</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-validate-deposit-to-bank" type="button">Copy</button><pre><code id="code-rust-validate-deposit-to-bank" class="language-rust">let validation = client
-    .validate_deposit_to_bank(ValidateDepositToBank::new(
-        &quot;REF-000002&quot;,
-        &quot;5000.00&quot;,
-        &quot;40090E2F-7446-4217-9345-7BBAB7043C4C&quot;,
-        &quot;0000000000&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-validate-deposit-to-bank" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-validate-deposit-to-bank" class="language-rust"><span class="tok-kw">let</span> validation = client
+    .<span class="tok-fn">validate_deposit_to_bank</span>(<span class="tok-ty">ValidateDepositToBank</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000002&quot;</span>,
+        <span class="tok-str">&quot;5000.00&quot;</span>,
+        <span class="tok-str">&quot;40090E2F-7446-4217-9345-7BBAB7043C4C&quot;</span>,
+        <span class="tok-str">&quot;0000000000&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-send-money" data-operation="send-money">
@@ -113,7 +125,7 @@ for bank in banks.banks.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /depositToBank</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/depositToBank</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + amount + destinationBankUUID + destinationBankAccountNumber</span>
   </div>
@@ -122,14 +134,14 @@ for bank in banks.banks.unwrap_or_default() {
 <li>There is no callback for the outcome; use the transaction status endpoint.</li></ul>
   <h4>Rust</h4>
   <p><code>send_money</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-send-money" type="button">Copy</button><pre><code id="code-rust-send-money" class="language-rust">let transfer = client
-    .send_money(SendMoney::new(
-        &quot;PAY-2026-0311&quot;,
-        &quot;5000.00&quot;,
-        &quot;40090E2F-7446-4217-9345-7BBAB7043C4C&quot;,
-        &quot;0000000000&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-send-money" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-send-money" class="language-rust"><span class="tok-kw">let</span> transfer = client
+    .<span class="tok-fn">send_money</span>(<span class="tok-ty">SendMoney</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;PAY-2026-0311&quot;</span>,
+        <span class="tok-str">&quot;5000.00&quot;</span>,
+        <span class="tok-str">&quot;40090E2F-7446-4217-9345-7BBAB7043C4C&quot;</span>,
+        <span class="tok-str">&quot;0000000000&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-transfer-to-paga-wallet" data-operation="transfer-to-paga-wallet">
@@ -139,7 +151,7 @@ for bank in banks.banks.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /moneyTransfer</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/moneyTransfer</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + amount + destinationAccount</span>
   </div>
@@ -147,13 +159,13 @@ for bank in banks.banks.unwrap_or_default() {
   <ul><li><code>referenceNumber</code> must be at most 50 characters.</li></ul>
   <h4>Rust</h4>
   <p><code>transfer_to_paga_wallet</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-transfer-to-paga-wallet" type="button">Copy</button><pre><code id="code-rust-transfer-to-paga-wallet" class="language-rust">let transfer = client
-    .transfer_to_paga_wallet(TransferToPagaWallet::new(
-        &quot;PAY-2026-0312&quot;,
-        5000.0,
-        &quot;08064343187&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-transfer-to-paga-wallet" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-transfer-to-paga-wallet" class="language-rust"><span class="tok-kw">let</span> transfer = client
+    .<span class="tok-fn">transfer_to_paga_wallet</span>(<span class="tok-ty">TransferToPagaWallet</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;PAY-2026-0312&quot;</span>,
+        <span class="tok-num">5000.0</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-validate-money-transfer" data-operation="validate-money-transfer">
@@ -163,7 +175,7 @@ for bank in banks.banks.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /validateMoneyTransfer</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/validateMoneyTransfer</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + amount + destinationAccount</span>
   </div>
@@ -171,13 +183,13 @@ for bank in banks.banks.unwrap_or_default() {
   
   <h4>Rust</h4>
   <p><code>validate_money_transfer</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-validate-money-transfer" type="button">Copy</button><pre><code id="code-rust-validate-money-transfer" class="language-rust">let validation = client
-    .validate_money_transfer(ValidateMoneyTransfer::new(
-        &quot;REF-000003&quot;,
-        5000.0,
-        &quot;08064343187&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-validate-money-transfer" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-validate-money-transfer" class="language-rust"><span class="tok-kw">let</span> validation = client
+    .<span class="tok-fn">validate_money_transfer</span>(<span class="tok-ty">ValidateMoneyTransfer</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000003&quot;</span>,
+        <span class="tok-num">5000.0</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-send-bulk-money-transfer" data-operation="send-bulk-money-transfer">
@@ -187,7 +199,7 @@ for bank in banks.banks.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /moneyTransferBulk</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/moneyTransferBulk</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + amount + destinationAccount + itemCount</span>
   </div>
@@ -196,12 +208,12 @@ for bank in banks.banks.unwrap_or_default() {
 <li>A bulk transfer can partially succeed, so check every entry in <code>results</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>send_bulk_money_transfer</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-send-bulk-money-transfer" type="button">Copy</button><pre><code id="code-rust-send-bulk-money-transfer" class="language-rust">let bulk = client
-    .send_bulk_money_transfer(SendBulkMoneyTransfer::new(vec![
-        BulkTransferItem::new(&quot;ITEM-1&quot;, 100.0, &quot;08064343187&quot;),
-        BulkTransferItem::new(&quot;ITEM-2&quot;, 200.0, &quot;08064343188&quot;),
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-send-bulk-money-transfer" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-send-bulk-money-transfer" class="language-rust"><span class="tok-kw">let</span> bulk = client
+    .<span class="tok-fn">send_bulk_money_transfer</span>(<span class="tok-ty">SendBulkMoneyTransfer</span>::<span class="tok-fn">new</span>(vec![
+        <span class="tok-ty">BulkTransferItem</span>::<span class="tok-fn">new</span>(<span class="tok-str">&quot;ITEM-1&quot;</span>, <span class="tok-num">100.0</span>, <span class="tok-str">&quot;08064343187&quot;</span>),
+        <span class="tok-ty">BulkTransferItem</span>::<span class="tok-fn">new</span>(<span class="tok-str">&quot;ITEM-2&quot;</span>, <span class="tok-num">200.0</span>, <span class="tok-str">&quot;08064343188&quot;</span>),
     ]))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

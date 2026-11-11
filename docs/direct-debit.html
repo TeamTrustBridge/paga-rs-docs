@@ -58,6 +58,18 @@
 
 <p>Direct Debit lets a customer authorise you to debit their bank account. You set the mandate up, wait for the bank to approve it, then charge it as often as the mandate allows.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-start-direct-debit-session">Start a hosted set-up session</a></li>
+    <li><a href="#op-create-direct-debit-mandate">Set up a mandate by API</a></li>
+    <li><a href="#op-get-mandate-status">Check mandate status</a></li>
+    <li><a href="#op-charge-mandate">Charge the mandate</a></li>
+    <li><a href="#op-get-charge-mandate-status">Check charge status</a></li>
+    <li><a href="#op-disable-mandate">Disable a mandate</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-start-direct-debit-session" data-operation="start-direct-debit-session">
   <div class="op-header">
@@ -66,7 +78,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /checkout/charge-process/start</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/checkout/charge-process/start</span>
     <span class="tag ">HTTP Basic</span>
     
   </div>
@@ -74,14 +86,14 @@
   <ul><li>The session expiry and payment expiry are strings of seconds.</li></ul>
   <h4>Rust</h4>
   <p><code>start_direct_debit_session</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-start-direct-debit-session" type="button">Copy</button><pre><code id="code-rust-start-direct-debit-session" class="language-rust">let session = client
-    .start_direct_debit_session(StartDirectDebitSession::new(
-        &quot;DD-2026-0001&quot;,
-        &quot;CUST-000184-WALLET&quot;,
-        50_000.0,
-        &quot;https://yourstore.com/webhooks/mandate&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-start-direct-debit-session" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-start-direct-debit-session" class="language-rust"><span class="tok-kw">let</span> session = client
+    .<span class="tok-fn">start_direct_debit_session</span>(<span class="tok-ty">StartDirectDebitSession</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;DD-2026-0001&quot;</span>,
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+        <span class="tok-num">50_000.0</span>,
+        <span class="tok-str">&quot;https://yourstore.com/webhooks/mandate&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-create-direct-debit-mandate" data-operation="create-direct-debit-mandate">
@@ -91,7 +103,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /paymentRequest</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/paymentRequest</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + amount + currency + payer.phoneNumber + payer.email</span>
   </div>
@@ -100,16 +112,16 @@
 <li><code>payerCollectionFeeShare</code> and <code>payeeCollectionFeeShare</code> must sum to 1.0.</li></ul>
   <h4>Rust</h4>
   <p><code>create_direct_debit_mandate</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-create-direct-debit-mandate" type="button">Copy</button><pre><code id="code-rust-create-direct-debit-mandate" class="language-rust">let mandate = client
-    .create_direct_debit_mandate(CreateDirectDebitMandate::new(
-        &quot;DD-2026-0001&quot;,
-        5000.0,
-        &quot;Bello Ramon&quot;,
-        &quot;08064343187&quot;,
-        &quot;Your business name&quot;,
-        &quot;CUST-000184-WALLET&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-create-direct-debit-mandate" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-create-direct-debit-mandate" class="language-rust"><span class="tok-kw">let</span> mandate = client
+    .<span class="tok-fn">create_direct_debit_mandate</span>(<span class="tok-ty">CreateDirectDebitMandate</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;DD-2026-0001&quot;</span>,
+        <span class="tok-num">5000.0</span>,
+        <span class="tok-str">&quot;Bello Ramon&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
+        <span class="tok-str">&quot;Your business name&quot;</span>,
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-mandate-status" data-operation="get-mandate-status">
@@ -119,7 +131,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /status</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/status</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -128,9 +140,9 @@
 <li>Read <code>data.additionalData.mandate[].ProcessStatusId</code> instead: <code>PENDING</code>, <code>VERIFIED</code>, <code>APPROVED</code> or <code>REJECTED</code>. Charge only when it is <code>APPROVED</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>get_mandate_status</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-mandate-status" type="button">Copy</button><pre><code id="code-rust-get-mandate-status" class="language-rust">let status = client.get_mandate_status(&quot;DD-2026-0001&quot;).await?;
-if status.is_approved() {
-    println!(&quot;ready to charge&quot;);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-mandate-status" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-mandate-status" class="language-rust"><span class="tok-kw">let</span> status = client.<span class="tok-fn">get_mandate_status</span>(<span class="tok-str">&quot;DD-2026-0001&quot;</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">if</span> status.<span class="tok-fn">is_approved</span>() {
+    println!(<span class="tok-str">&quot;ready to charge&quot;</span>);
 }</code></pre></div>
 </article>
 
@@ -141,7 +153,7 @@ if status.is_approved() {
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /chargeDebitMandate</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/chargeDebitMandate</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + amount + accountReference</span>
   </div>
@@ -149,13 +161,13 @@ if status.is_approved() {
   <ul><li>A successful response means the charge was **accepted**, not completed — fulfil only once the charge callback confirms it.</li></ul>
   <h4>Rust</h4>
   <p><code>charge_mandate</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-charge-mandate" type="button">Copy</button><pre><code id="code-rust-charge-mandate" class="language-rust">let charge = client
-    .charge_mandate(ChargeMandate::new(
-        &quot;DD-CHARGE-0001&quot;,
-        600.0,
-        &quot;CUST-000184-WALLET&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-charge-mandate" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-charge-mandate" class="language-rust"><span class="tok-kw">let</span> charge = client
+    .<span class="tok-fn">charge_mandate</span>(<span class="tok-ty">ChargeMandate</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;DD-CHARGE-0001&quot;</span>,
+        <span class="tok-num">600.0</span>,
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-charge-mandate-status" data-operation="get-charge-mandate-status">
@@ -165,7 +177,7 @@ if status.is_approved() {
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /getChargeMandateStatus</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getChargeMandateStatus</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -173,9 +185,9 @@ if status.is_approved() {
   <ul><li><code>data.statusCode</code> is <code>0</code> charged, <code>1</code> pending, <code>-1</code> invalid and <code>-4</code> unknown.</li></ul>
   <h4>Rust</h4>
   <p><code>get_charge_mandate_status</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-charge-mandate-status" type="button">Copy</button><pre><code id="code-rust-get-charge-mandate-status" class="language-rust">let status = client.get_charge_mandate_status(&quot;DD-CHARGE-0001&quot;).await?;
-if status.charge_status() == Some(0) {
-    println!(&quot;charged&quot;);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-charge-mandate-status" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-charge-mandate-status" class="language-rust"><span class="tok-kw">let</span> status = client.<span class="tok-fn">get_charge_mandate_status</span>(<span class="tok-str">&quot;DD-CHARGE-0001&quot;</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">if</span> status.<span class="tok-fn">charge_status</span>() == <span class="tok-bi">Some</span>(<span class="tok-num">0</span>) {
+    println!(<span class="tok-str">&quot;charged&quot;</span>);
 }</code></pre></div>
 </article>
 
@@ -186,7 +198,7 @@ if status.charge_status() == Some(0) {
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /disableMandate</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/disableMandate</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountReference</span>
   </div>
@@ -194,12 +206,12 @@ if status.charge_status() == Some(0) {
   
   <h4>Rust</h4>
   <p><code>disable_mandate</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-disable-mandate" type="button">Copy</button><pre><code id="code-rust-disable-mandate" class="language-rust">client
-    .disable_mandate(DisableMandate::new(
-        &quot;DD-DIS-0001&quot;,
-        &quot;CUST-000184-WALLET&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-disable-mandate" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-disable-mandate" class="language-rust">client
+    .<span class="tok-fn">disable_mandate</span>(<span class="tok-ty">DisableMandate</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;DD-DIS-0001&quot;</span>,
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

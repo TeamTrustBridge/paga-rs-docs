@@ -58,6 +58,15 @@
 
 <p>Buy airtime or data for a phone number from your business balance. For data, pick the bundle first — the amount must match the bundle's price exactly.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-get-mobile-operators">List mobile operators</a></li>
+    <li><a href="#op-get-data-bundles">List data bundles</a></li>
+    <li><a href="#op-buy-airtime">Buy airtime or data</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-get-mobile-operators" data-operation="get-mobile-operators">
   <div class="op-header">
@@ -66,7 +75,7 @@
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /getMobileOperators</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getMobileOperators</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber</span>
   </div>
@@ -75,9 +84,9 @@
 <li>Cache the list.</li></ul>
   <h4>Rust</h4>
   <p><code>get_mobile_operators</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-mobile-operators" type="button">Copy</button><pre><code id="code-rust-get-mobile-operators" class="language-rust">let operators = client.get_mobile_operators(&quot;REF-000001&quot;, None).await?;
-for operator in operators.mobile_operator.unwrap_or_default() {
-    println!(&quot;{:?} {:?}&quot;, operator.name, operator.mobile_operator_code);
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-mobile-operators" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-mobile-operators" class="language-rust"><span class="tok-kw">let</span> operators = client.<span class="tok-fn">get_mobile_operators</span>(<span class="tok-str">&quot;REF-000001&quot;</span>, <span class="tok-bi">None</span>).<span class="tok-kw">await</span>?;
+<span class="tok-kw">for</span> operator <span class="tok-kw">in</span> operators.mobile_operator.<span class="tok-fn">unwrap_or_default</span>() {
+    println!(<span class="tok-str">&quot;{:?} {:?}&quot;</span>, operator.name, operator.mobile_operator_code);
 }</code></pre></div>
 </article>
 
@@ -88,7 +97,7 @@ for operator in operators.mobile_operator.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /getDataBundleByOperator</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/getDataBundleByOperator</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + operatorPublicId</span>
   </div>
@@ -97,12 +106,12 @@ for operator in operators.mobile_operator.unwrap_or_default() {
 <li>Bundles rarely change, so cache the list and refresh it monthly.</li></ul>
   <h4>Rust</h4>
   <p><code>get_data_bundles</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-data-bundles" type="button">Copy</button><pre><code id="code-rust-get-data-bundles" class="language-rust">let bundles = client
-    .get_data_bundles(
-        &quot;REF-000001&quot;,
-        &quot;42419156-DD57-4737-8373-20678CD9AA29&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-data-bundles" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-data-bundles" class="language-rust"><span class="tok-kw">let</span> bundles = client
+    .<span class="tok-fn">get_data_bundles</span>(
+        <span class="tok-str">&quot;REF-000001&quot;</span>,
+        <span class="tok-str">&quot;42419156-DD57-4737-8373-20678CD9AA29&quot;</span>,
     )
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-buy-airtime" data-operation="buy-airtime">
@@ -112,7 +121,7 @@ for operator in operators.mobile_operator.unwrap_or_default() {
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /airtimePurchase</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/airtimePurchase</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + amount + destinationPhoneNumber</span>
   </div>
@@ -121,14 +130,14 @@ for operator in operators.mobile_operator.unwrap_or_default() {
 <li>For a data bundle, <code>amount</code> must be exactly the bundle's <code>servicePrice</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>buy_airtime</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-buy-airtime" type="button">Copy</button><pre><code id="code-rust-buy-airtime" class="language-rust">let purchase = client
-    .buy_airtime(BuyAirtime::new(
-        &quot;AIR-2026-0042&quot;,
-        &quot;500&quot;,
-        &quot;08063332187&quot;,
-        &quot;42419156-DD57-4737-8373-20678CD9AA29&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-buy-airtime" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-buy-airtime" class="language-rust"><span class="tok-kw">let</span> purchase = client
+    .<span class="tok-fn">buy_airtime</span>(<span class="tok-ty">BuyAirtime</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;AIR-2026-0042&quot;</span>,
+        <span class="tok-str">&quot;500&quot;</span>,
+        <span class="tok-str">&quot;08063332187&quot;</span>,
+        <span class="tok-str">&quot;42419156-DD57-4737-8373-20678CD9AA29&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

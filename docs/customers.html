@@ -58,6 +58,16 @@
 
 <p>Registering a customer opens a Paga account for them on your business account. The KYC variants upload photographs as well.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-register-customer">Register a customer</a></li>
+    <li><a href="#op-register-customer-with-kyc">Register a customer with KYC</a></li>
+    <li><a href="#op-register-customer-account-photo">Upload a customer account photo</a></li>
+    <li><a href="#op-register-customer-identification">Upload a customer identification</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-register-customer" data-operation="register-customer">
   <div class="op-header">
@@ -66,7 +76,7 @@
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /registerCustomer</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/registerCustomer</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + customerPhoneNumber + customerFirstName + customerLastName</span>
   </div>
@@ -74,16 +84,16 @@
   <ul><li>The phone number must not already belong to a registered customer.</li></ul>
   <h4>Rust</h4>
   <p><code>register_customer</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-register-customer" type="button">Copy</button><pre><code id="code-rust-register-customer" class="language-rust">let customer = client
-    .register_customer(RegisterCustomer::new(
-        &quot;REF-000010&quot;,
-        &quot;08064343187&quot;,
-        &quot;Bello&quot;,
-        &quot;Ramon&quot;,
-        &quot;customer@example.com&quot;,
-        &quot;1989-10-02&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-register-customer" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-register-customer" class="language-rust"><span class="tok-kw">let</span> customer = client
+    .<span class="tok-fn">register_customer</span>(<span class="tok-ty">RegisterCustomer</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000010&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
+        <span class="tok-str">&quot;Bello&quot;</span>,
+        <span class="tok-str">&quot;Ramon&quot;</span>,
+        <span class="tok-str">&quot;customer@example.com&quot;</span>,
+        <span class="tok-str">&quot;1989-10-02&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-register-customer-with-kyc" data-operation="register-customer-with-kyc">
@@ -93,7 +103,7 @@
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /registerCustomerWithKYC</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/registerCustomerWithKYC</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + customerPhoneNumber + customerFirstName + customerLastName</span>
   </div>
@@ -102,21 +112,21 @@
 <li>Each photograph must be a JPEG of at most 500 KB.</li></ul>
   <h4>Rust</h4>
   <p><code>register_customer_with_kyc</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-register-customer-with-kyc" type="button">Copy</button><pre><code id="code-rust-register-customer-with-kyc" class="language-rust">let photo = std::fs::read(&quot;account-photo.jpg&quot;)?;
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-register-customer-with-kyc" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-register-customer-with-kyc" class="language-rust"><span class="tok-kw">let</span> photo = std::fs::<span class="tok-fn">read</span>(<span class="tok-str">&quot;account-photo.jpg&quot;</span>)?;
 
-let customer = client
-    .register_customer_with_kyc(RegisterCustomerWithKyc::new(
-        &quot;REF-000011&quot;,
-        &quot;08064343187&quot;,
-        &quot;customer@example.com&quot;,
-        &quot;Bello&quot;,
-        &quot;Ramon&quot;,
-        &quot;1989-10-02&quot;,
-        &quot;MALE&quot;,
-        photo.clone(),
+<span class="tok-kw">let</span> customer = client
+    .<span class="tok-fn">register_customer_with_kyc</span>(<span class="tok-ty">RegisterCustomerWithKyc</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000011&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
+        <span class="tok-str">&quot;customer@example.com&quot;</span>,
+        <span class="tok-str">&quot;Bello&quot;</span>,
+        <span class="tok-str">&quot;Ramon&quot;</span>,
+        <span class="tok-str">&quot;1989-10-02&quot;</span>,
+        <span class="tok-str">&quot;MALE&quot;</span>,
+        photo.<span class="tok-fn">clone</span>(),
         photo,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-register-customer-account-photo" data-operation="register-customer-account-photo">
@@ -126,7 +136,7 @@ let customer = client
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /registerCustomerAccountPhoto</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/registerCustomerAccountPhoto</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + customerPhoneNumber</span>
   </div>
@@ -135,15 +145,15 @@ let customer = client
 <li>The photograph must be a JPEG of at most 500 KB.</li></ul>
   <h4>Rust</h4>
   <p><code>register_customer_account_photo</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-register-customer-account-photo" type="button">Copy</button><pre><code id="code-rust-register-customer-account-photo" class="language-rust">let photo = std::fs::read(&quot;account-photo.jpg&quot;)?;
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-register-customer-account-photo" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-register-customer-account-photo" class="language-rust"><span class="tok-kw">let</span> photo = std::fs::<span class="tok-fn">read</span>(<span class="tok-str">&quot;account-photo.jpg&quot;</span>)?;
 
 client
-    .register_customer_account_photo(RegisterCustomerAccountPhoto::new(
-        &quot;REF-000012&quot;,
-        &quot;08064343187&quot;,
+    .<span class="tok-fn">register_customer_account_photo</span>(<span class="tok-ty">RegisterCustomerAccountPhoto</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000012&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
         photo,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-register-customer-identification" data-operation="register-customer-identification">
@@ -153,7 +163,7 @@ client
   </div>
   <div class="meta">
     <span class="tag ">Business API</span>
-    <span class="tag tag-endpoint">POST /registerCustomerIdentification</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/registerCustomerIdentification</span>
     <span class="tag ">principal / credentials headers</span>
     <span class="tag tag-endpoint">referenceNumber + customerPhoneNumber + customerIdType + customerIdNumber + customerIdExpirationDate</span>
   </div>
@@ -162,18 +172,18 @@ client
 <li><code>customerIdExpirationDate</code> is formatted as <code>YYYY-MM-DD</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>register_customer_identification</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-register-customer-identification" type="button">Copy</button><pre><code id="code-rust-register-customer-identification" class="language-rust">let photo = std::fs::read(&quot;id-photo.jpg&quot;)?;
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-register-customer-identification" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-register-customer-identification" class="language-rust"><span class="tok-kw">let</span> photo = std::fs::<span class="tok-fn">read</span>(<span class="tok-str">&quot;id-photo.jpg&quot;</span>)?;
 
 client
-    .register_customer_identification(RegisterCustomerIdentification::new(
-        &quot;REF-000013&quot;,
-        &quot;08064343187&quot;,
-        &quot;NATIONAL_ID&quot;,
-        &quot;12345678901&quot;,
-        &quot;2030-01-01&quot;,
+    .<span class="tok-fn">register_customer_identification</span>(<span class="tok-ty">RegisterCustomerIdentification</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000013&quot;</span>,
+        <span class="tok-str">&quot;08064343187&quot;</span>,
+        <span class="tok-str">&quot;NATIONAL_ID&quot;</span>,
+        <span class="tok-str">&quot;12345678901&quot;</span>,
+        <span class="tok-str">&quot;2030-01-01&quot;</span>,
         photo,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>

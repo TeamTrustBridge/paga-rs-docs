@@ -58,6 +58,20 @@
 
 <p>A subsidiary account is a Paga account for one of your customers. You can hold their money, move it between accounts, and set it up to sweep straight into a bank account.</p>
 
+<nav class="toc" aria-label="On this page">
+  <p class="toc-heading">On this page</p>
+  <ul>
+    <li><a href="#op-create-subsidiary-account">Create a subsidiary account</a></li>
+    <li><a href="#op-charge-subsidiary-account">Charge a subsidiary account</a></li>
+    <li><a href="#op-top-up-subsidiary-account">Top up a subsidiary account</a></li>
+    <li><a href="#op-transfer-between-subsidiary-accounts">Transfer between subsidiary accounts</a></li>
+    <li><a href="#op-retrieve-subsidiary-account">Retrieve a subsidiary account</a></li>
+    <li><a href="#op-update-subsidiary-account">Update a subsidiary account</a></li>
+    <li><a href="#op-get-subsidiary-balance">Get a subsidiary account balance</a></li>
+    <li><a href="#op-get-subsidiary-history">Get a subsidiary account history</a></li>
+  </ul>
+</nav>
+
 <h2 id="operations">Operations</h2>
 <article class="op" id="op-create-subsidiary-account" data-operation="create-subsidiary-account">
   <div class="op-header">
@@ -66,7 +80,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /subsidiary-accounts</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/subsidiary-accounts</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountReference + iifiNumber + autoSweep.bankPublicId + autoSweep.destination + autoSweep.accountNumber + callbackUrl</span>
   </div>
@@ -75,13 +89,13 @@
 <li>Reusing a <code>referenceNumber</code> or <code>accountReference</code> returns status code <code>102</code> and never creates a second account.</li></ul>
   <h4>Rust</h4>
   <p><code>create_subsidiary_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-create-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-create-subsidiary-account" class="language-rust">let account = client
-    .create_subsidiary_account(CreateSubsidiaryAccount::new(
-        &quot;REF-000005&quot;,
-        &quot;CUST-000184-WALLET&quot;,
-        &quot;Bello Ramon&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-create-subsidiary-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-create-subsidiary-account" class="language-rust"><span class="tok-kw">let</span> account = client
+    .<span class="tok-fn">create_subsidiary_account</span>(<span class="tok-ty">CreateSubsidiaryAccount</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;REF-000005&quot;</span>,
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+        <span class="tok-str">&quot;Bello Ramon&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-charge-subsidiary-account" data-operation="charge-subsidiary-account">
@@ -91,7 +105,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /subsidiary-accounts/{accountReference}/charge</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/subsidiary-accounts/{accountReference}/charge</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + amount + currency + narration</span>
   </div>
@@ -100,13 +114,13 @@
 <li>Retrying with the same <code>referenceNumber</code> never moves money twice.</li></ul>
   <h4>Rust</h4>
   <p><code>charge_subsidiary_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-charge-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-charge-subsidiary-account" class="language-rust">let charge = client
-    .charge_subsidiary_account(ChargeSubsidiaryAccount::new(
-        &quot;CUST-000184-WALLET&quot;,
-        &quot;REF-CHARGE-001&quot;,
-        1000.0,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-charge-subsidiary-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-charge-subsidiary-account" class="language-rust"><span class="tok-kw">let</span> charge = client
+    .<span class="tok-fn">charge_subsidiary_account</span>(<span class="tok-ty">ChargeSubsidiaryAccount</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+        <span class="tok-str">&quot;REF-CHARGE-001&quot;</span>,
+        <span class="tok-num">1000.0</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-top-up-subsidiary-account" data-operation="top-up-subsidiary-account">
@@ -116,7 +130,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /subsidiary-accounts/{accountReference}/topup</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/subsidiary-accounts/{accountReference}/topup</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + amount + currency + narration</span>
   </div>
@@ -124,13 +138,13 @@
   <ul><li>Not available on virtual accounts.</li></ul>
   <h4>Rust</h4>
   <p><code>top_up_subsidiary_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-top-up-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-top-up-subsidiary-account" class="language-rust">let top_up = client
-    .top_up_subsidiary_account(TopUpSubsidiaryAccount::new(
-        &quot;CUST-000184-WALLET&quot;,
-        &quot;REF-TOPUP-001&quot;,
-        500.0,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-top-up-subsidiary-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-top-up-subsidiary-account" class="language-rust"><span class="tok-kw">let</span> top_up = client
+    .<span class="tok-fn">top_up_subsidiary_account</span>(<span class="tok-ty">TopUpSubsidiaryAccount</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+        <span class="tok-str">&quot;REF-TOPUP-001&quot;</span>,
+        <span class="tok-num">500.0</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-transfer-between-subsidiary-accounts" data-operation="transfer-between-subsidiary-accounts">
@@ -140,7 +154,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">POST /subsidiary-accounts/transfer</span>
+    <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/subsidiary-accounts/transfer</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + sourceAccountIdentifier + destinationAccountIdentifier + amount + currency + narration</span>
   </div>
@@ -148,16 +162,16 @@
   <ul><li>Paga sends one callback, for the source account only.</li></ul>
   <h4>Rust</h4>
   <p><code>transfer_between_subsidiary_accounts</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-transfer-between-subsidiary-accounts" type="button">Copy</button><pre><code id="code-rust-transfer-between-subsidiary-accounts" class="language-rust">let transfer = client
-    .transfer_between_subsidiary_accounts(
-        TransferBetweenSubsidiaryAccounts::new(
-            &quot;CUST-000184-WALLET&quot;,
-            &quot;CUST-000221-WALLET&quot;,
-            &quot;REF-TRANSFER-001&quot;,
-            1500.0,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-transfer-between-subsidiary-accounts" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-transfer-between-subsidiary-accounts" class="language-rust"><span class="tok-kw">let</span> transfer = client
+    .<span class="tok-fn">transfer_between_subsidiary_accounts</span>(
+        <span class="tok-ty">TransferBetweenSubsidiaryAccounts</span>::<span class="tok-fn">new</span>(
+            <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+            <span class="tok-str">&quot;CUST-000221-WALLET&quot;</span>,
+            <span class="tok-str">&quot;REF-TRANSFER-001&quot;</span>,
+            <span class="tok-num">1500.0</span>,
         ),
     )
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-retrieve-subsidiary-account" data-operation="retrieve-subsidiary-account">
@@ -167,7 +181,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">GET /subsidiary-accounts/{accountReference}</span>
+    <span class="tag tag-method tag-get">GET</span><span class="tag tag-endpoint">/subsidiary-accounts/{accountReference}</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
   </div>
@@ -175,9 +189,9 @@
   <ul><li>The <code>accountIdentifier</code> is the account's <code>accountReference</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>retrieve_subsidiary_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-retrieve-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-retrieve-subsidiary-account" class="language-rust">let account = client
-    .retrieve_subsidiary_account(&quot;CUST-000184-WALLET&quot;, &quot;REF-GET-001&quot;)
-    .await?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-retrieve-subsidiary-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-retrieve-subsidiary-account" class="language-rust"><span class="tok-kw">let</span> account = client
+    .<span class="tok-fn">retrieve_subsidiary_account</span>(<span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>, <span class="tok-str">&quot;REF-GET-001&quot;</span>)
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-update-subsidiary-account" data-operation="update-subsidiary-account">
@@ -187,7 +201,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">PUT /subsidiary-accounts/{accountReference}</span>
+    <span class="tag tag-method tag-put">PUT</span><span class="tag tag-endpoint">/subsidiary-accounts/{accountReference}</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier + iifiNumber + autoSweep.destination + autoSweep.bankPublicId + autoSweep.accountNumber + callbackUrl</span>
   </div>
@@ -196,12 +210,12 @@
 <li><code>accountNumber</code> and <code>accountReference</code> cannot be changed.</li></ul>
   <h4>Rust</h4>
   <p><code>update_subsidiary_account</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-update-subsidiary-account" type="button">Copy</button><pre><code id="code-rust-update-subsidiary-account" class="language-rust">let account = client
-    .update_subsidiary_account(UpdateSubsidiaryAccount::new(
-        &quot;CUST-000184-WALLET&quot;,
-        &quot;REF-UPDATE-001&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-update-subsidiary-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-update-subsidiary-account" class="language-rust"><span class="tok-kw">let</span> account = client
+    .<span class="tok-fn">update_subsidiary_account</span>(<span class="tok-ty">UpdateSubsidiaryAccount</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+        <span class="tok-str">&quot;REF-UPDATE-001&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-subsidiary-balance" data-operation="get-subsidiary-balance">
@@ -211,7 +225,7 @@
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">GET /subsidiary-accounts/{accountReference}/balance</span>
+    <span class="tag tag-method tag-get">GET</span><span class="tag tag-endpoint">/subsidiary-accounts/{accountReference}/balance</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
   </div>
@@ -219,10 +233,10 @@
   
   <h4>Rust</h4>
   <p><code>get_subsidiary_balance</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-subsidiary-balance" type="button">Copy</button><pre><code id="code-rust-get-subsidiary-balance" class="language-rust">let balance = client
-    .get_subsidiary_balance(&quot;CUST-000184-WALLET&quot;, &quot;REF-BAL-001&quot;)
-    .await?;
-println!(&quot;{:?}&quot;, balance.balance);</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-subsidiary-balance" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-subsidiary-balance" class="language-rust"><span class="tok-kw">let</span> balance = client
+    .<span class="tok-fn">get_subsidiary_balance</span>(<span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>, <span class="tok-str">&quot;REF-BAL-001&quot;</span>)
+    .<span class="tok-kw">await</span>?;
+println!(<span class="tok-str">&quot;{:?}&quot;</span>, balance.balance);</code></pre></div>
 </article>
 
 <article class="op" id="op-get-subsidiary-history" data-operation="get-subsidiary-history">
@@ -232,7 +246,7 @@ println!(&quot;{:?}&quot;, balance.balance);</code></pre></div>
   </div>
   <div class="meta">
     <span class="tag tag-collect">Collect API</span>
-    <span class="tag tag-endpoint">GET /subsidiary-accounts/{accountReference}/history</span>
+    <span class="tag tag-method tag-get">GET</span><span class="tag tag-endpoint">/subsidiary-accounts/{accountReference}/history</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag tag-endpoint">accountIdentifier + startDateTimeUTC + endDateTimeUTC</span>
   </div>
@@ -242,14 +256,14 @@ println!(&quot;{:?}&quot;, balance.balance);</code></pre></div>
 <li><code>referenceNumber</code> is required as a query parameter, but is not part of the hash.</li></ul>
   <h4>Rust</h4>
   <p><code>get_subsidiary_history</code></p>
-  <div class="code-block"><button class="button" data-copy="#code-rust-get-subsidiary-history" type="button">Copy</button><pre><code id="code-rust-get-subsidiary-history" class="language-rust">let history = client
-    .get_subsidiary_history(GetSubsidiaryHistory::new(
-        &quot;CUST-000184-WALLET&quot;,
-        &quot;REF-HIS-001&quot;,
-        &quot;2026-06-01T00:00:00&quot;,
-        &quot;2026-06-30T23:59:59&quot;,
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-subsidiary-history" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-subsidiary-history" class="language-rust"><span class="tok-kw">let</span> history = client
+    .<span class="tok-fn">get_subsidiary_history</span>(<span class="tok-ty">GetSubsidiaryHistory</span>::<span class="tok-fn">new</span>(
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+        <span class="tok-str">&quot;REF-HIS-001&quot;</span>,
+        <span class="tok-str">&quot;2026-06-01T00:00:00&quot;</span>,
+        <span class="tok-str">&quot;2026-06-30T23:59:59&quot;</span>,
     ))
-    .await?;</code></pre></div>
+    .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <h2 id="next">Next</h2>
