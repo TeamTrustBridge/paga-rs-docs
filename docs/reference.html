@@ -112,11 +112,12 @@
     <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/paymentRequest</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag ">Collection</span>
-    <span class="tag tag-endpoint">referenceNumber + amount + currency + payer.phoneNumber + payer.email</span>
+    <span class="tag tag-endpoint">referenceNumber + amount + currency + payer.phoneNumber + payer.email + payee.accountNumber + payee.phoneNumber + payee.bankId + payee.bankAccountNumber</span>
   </div>
   <p>Creates a payment request. The customer pays via the payment methods you send, and Paga calls your callback when the payment completes.</p>
   <ul><li>The same operation serves the Bank USSD, Paga wallet and USD bank transfer flows — pick the flow with <code>paymentMethods</code>.</li>
-<li><code>payer.email</code> takes part in the hash even when you omit it.</li></ul>
+<li><code>payer.email</code> takes part in the hash even when you omit it.</li>
+<li>The hash signs the payee fields as well, so send the payee's account number, phone number and bank details.</li></ul>
   <h4>Rust</h4>
   <p><code>create_payment</code></p>
   <div class="code-block"><button class="button copy-button" data-copy="#code-rust-create-payment" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-create-payment" class="language-rust"><span class="tok-kw">let</span> payment = client
@@ -294,10 +295,11 @@
     <span class="tag tag-method tag-post">POST</span><span class="tag tag-endpoint">/paymentRequest</span>
     <span class="tag ">HTTP Basic</span>
     <span class="tag ">Direct Debit</span>
-    <span class="tag tag-endpoint">referenceNumber + amount + currency + payer.phoneNumber + payer.email</span>
+    <span class="tag tag-endpoint">referenceNumber + amount + currency + payer.phoneNumber + payer.email + payee.accountNumber + payee.phoneNumber + payee.bankId + payee.bankAccountNumber</span>
   </div>
   <p>Creates a payment request with <code>paymentMethods</code> set to <code>[&quot;DIRECT_DEBIT&quot;]</code>, so the customer authorises you to debit their bank account.</p>
   <ul><li>The authorisation transfer must come from mobile banking, internet banking or a branch — not from POS, USSD or ATM.</li>
+<li>The hash signs the payee fields as well, exactly like the Create a payment request operation.</li>
 <li><code>payerCollectionFeeShare</code> and <code>payeeCollectionFeeShare</code> must sum to 1.0.</li></ul>
   <h4>Rust</h4>
   <p><code>create_direct_debit_mandate</code></p>
@@ -1075,7 +1077,7 @@ println!(<span class="tok-str">&quot;{:?}&quot;</span>, status.transaction_statu
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
   </div>
   <p>Returns an account's balance.</p>
-  
+  <ul><li>The <code>accountIdentifier</code> is the account's <code>accountReference</code>.</li></ul>
   <h4>Rust</h4>
   <p><code>get_subsidiary_balance</code></p>
   <div class="code-block"><button class="button copy-button" data-copy="#code-rust-get-subsidiary-balance" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-get-subsidiary-balance" class="language-rust"><span class="tok-kw">let</span> balance = client
@@ -1126,6 +1128,7 @@ println!(<span class="tok-str">&quot;{:?}&quot;</span>, balance.balance);</code>
   </div>
   <p>Registers a standing instruction that lets a customer pay you repeatedly from the same account.</p>
   <ul><li><code>accountReference</code> must be 11 to 30 characters.</li>
+<li><code>accountName</code>, <code>firstName</code> and <code>lastName</code> are required; <code>phoneNumber</code>, <code>email</code> and <code>fundingTransactionLimit</code> are optional.</li>
 <li>Paga calls your <code>callbackUrl</code> whenever the account is funded.</li></ul>
   <h4>Rust</h4>
   <p><code>register_persistent_payment_account</code></p>
@@ -1138,6 +1141,9 @@ println!(<span class="tok-str">&quot;{:?}&quot;</span>, balance.balance);</code>
             <span class="tok-str">&quot;40090E2F-7446-4217-9345-7BBAB7043C4C&quot;</span>,
             <span class="tok-str">&quot;0000000000&quot;</span>,
             <span class="tok-str">&quot;https://yourstore.com/webhooks/paga&quot;</span>,
+            <span class="tok-str">&quot;Acme Store&quot;</span>,
+            <span class="tok-str">&quot;Jane&quot;</span>,
+            <span class="tok-str">&quot;Doe&quot;</span>,
         ),
     )
     .<span class="tok-kw">await</span>?;</code></pre></div>
@@ -1156,17 +1162,16 @@ println!(<span class="tok-str">&quot;{:?}&quot;</span>, balance.balance);</code>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier + financialIdentificationNumber + creditBankId + creditBankAccountNumber + callbackUrl</span>
   </div>
   <p>Changes a persistent payment account.</p>
-  <ul><li>Every field takes part in the hash, so send the current value of the ones you are not changing.</li></ul>
+  <ul><li>Every field takes part in the hash, so send the current value of the ones you are not changing.</li>
+<li>Optional: <code>accountName</code>, <code>firstName</code>, <code>lastName</code> and <code>phoneNumber</code>, alongside the credit and callback fields.</li></ul>
   <h4>Rust</h4>
   <p><code>update_persistent_payment_account</code></p>
-  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-update-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-update-persistent-payment-account" class="language-rust"><span class="tok-kw">let</span> account = client
-    .<span class="tok-fn">update_persistent_payment_account</span>(
-        <span class="tok-ty">UpdatePersistentPaymentAccount</span>::<span class="tok-fn">new</span>(
-            <span class="tok-str">&quot;REF-000007&quot;</span>,
-            <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
-        ),
-    )
-    .<span class="tok-kw">await</span>?;</code></pre></div>
+  <div class="code-block"><button class="button copy-button" data-copy="#code-rust-update-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-update-persistent-payment-account" class="language-rust"><span class="tok-kw">let</span> <span class="tok-kw">mut</span> request = <span class="tok-ty">UpdatePersistentPaymentAccount</span>::<span class="tok-fn">new</span>(
+    <span class="tok-str">&quot;REF-000007&quot;</span>,
+    <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+);
+request.account_name = <span class="tok-bi">Some</span>(<span class="tok-str">&quot;Acme Store&quot;</span>.<span class="tok-fn">to_string</span>());
+<span class="tok-kw">let</span> account = client.<span class="tok-fn">update_persistent_payment_account</span>(request).<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
 <article class="op" id="op-get-persistent-payment-account" data-operation="get-persistent-payment-account" data-filter-item data-section="persistent" data-search="get a persistent payment account collect api - get a persistent payment account post /getpersistentpaymentaccount persistent accounts get_persistent_payment_account">
@@ -1203,11 +1208,16 @@ println!(<span class="tok-str">&quot;{:?}&quot;</span>, balance.balance);</code>
     <span class="tag tag-endpoint">referenceNumber + accountIdentifier</span>
   </div>
   <p>Deletes a persistent payment account.</p>
-  <ul><li>The <code>accountIdentifier</code> accepts a NUBAN **or** an <code>accountReference</code>.</li></ul>
+  <ul><li>The <code>accountIdentifier</code> accepts a NUBAN **or** an <code>accountReference</code>.</li>
+<li><code>reason</code> is optional.</li></ul>
   <h4>Rust</h4>
   <p><code>delete_persistent_payment_account</code></p>
   <div class="code-block"><button class="button copy-button" data-copy="#code-rust-delete-persistent-payment-account" type="button" aria-label="Copy this sample to the clipboard">Copy</button><pre><code id="code-rust-delete-persistent-payment-account" class="language-rust">client
-    .<span class="tok-fn">delete_persistent_payment_account</span>(<span class="tok-str">&quot;REF-000009&quot;</span>, <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>)
+    .<span class="tok-fn">delete_persistent_payment_account</span>(
+        <span class="tok-str">&quot;REF-000009&quot;</span>,
+        <span class="tok-str">&quot;CUST-000184-WALLET&quot;</span>,
+        <span class="tok-bi">Some</span>(<span class="tok-str">&quot;Account closed&quot;</span>),
+    )
     .<span class="tok-kw">await</span>?;</code></pre></div>
 </article>
 
